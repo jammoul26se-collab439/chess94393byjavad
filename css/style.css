@@ -154,3 +154,150 @@ body {
 }
 
 
+/* ============================= */
+/* 📱 Mobile Devices - max 600px */
+/* ============================= */
+
+@media (max-width: 600px) {
+
+    #game-over-message {
+        font-size: 24px;
+        width: 240px;
+        padding: 10px 15px;
+    }
+
+    #check-message {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 22px;
+        padding: 12px 18px;
+    }
+
+    #timers {
+        top: 8px;
+        padding: 0 10px;
+    }
+
+    #white-timer,
+    #black-timer {
+        font-size: 22px;
+        padding: 4px 8px;
+    }
+
+    #start-block {
+        width: 90%;
+        height: 450px;
+        border-width: 4px;
+    }
+
+    #start-button {
+        margin-top: 40px;
+        padding: 10px 25px;
+        font-size: 20px;
+    }
+
+    #loading-text {
+        font-size: 26px;
+    }
+
+    #chess-board {
+        max-width: 95vw;
+        max-height: 95vw;
+        width: 95vw;
+        height: 95vw;
+        margin: 15px auto;
+    }
+
+    .chess-container {
+        width: 100%;
+    }
+
+    #promotion-menu {
+        width: 80%;
+        padding: 18px;
+    }
+
+    #promotion-menu p {
+        font-size: 17px;
+    }
+
+    #promotion-menu button {
+        margin: 4px;
+        padding: 7px 10px;
+    }
+}
+
+
+/* ============================= */
+/* 📱 Tablet Devices - max 900px */
+/* ============================= */
+
+@media (min-width: 601px) and (max-width: 900px) {
+
+    #game-over-message {
+        font-size: 26px;
+        width: 270px;
+        padding: 10px 18px;
+    }
+
+    #check-message {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        padding: 13px 20px;
+    }
+
+    #timers {
+        top: 10px;
+        padding: 0 18px;
+    }
+
+    #white-timer,
+    #black-timer {
+        font-size: 25px;
+        padding: 5px 10px;
+    }
+
+    #start-block {
+        width: 75%;
+        height: 500px;
+    }
+
+    #start-button {
+        margin-top: 45px;
+        padding: 11px 30px;
+        font-size: 21px;
+    }
+
+    #loading-text {
+        font-size: 30px;
+    }
+
+    #chess-board {
+        max-width: 90vw;
+        max-height: 90vw;
+        width: 90vw;
+        height: 90vw;
+        margin: 18px auto;
+    }
+
+    .chess-container {
+        width: 95%;
+    }
+
+    #promotion-menu {
+        width: 70%;
+        padding: 22px;
+    }
+
+    #promotion-menu p {
+        font-size: 19px;
+    }
+
+    #promotion-menu button {
+        margin: 5px;
+        padding: 8px 13px;
+    }
+}
