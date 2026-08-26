@@ -1,0 +1,156 @@
+#game-over-message {
+    display: none;
+    background-color: green;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 20px;
+    margin-top: 20px;
+    width: 300px;
+}
+#check-message {
+    display: none;
+    position : fixed;
+    top: 50%;
+    left: calc(50% + 250px);
+    transform: translateY(-50%);
+    color: white;
+    background-color: green;
+    font-size: 28px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 15px 25px;
+    z-index: 1000;
+}
+
+#timers {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 25px;
+    box-sizing: border-box;
+    z-index: 500;
+    pointer-events: none;
+}
+
+#white-timer, #black-timer {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    background: black;
+    padding: 5px 12px;
+    border-radius: 5px;
+}
+
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url("../assets/images/WallPaper.jpeg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#loading-text {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+#start-block {
+    display: none;
+    background: black;
+    width: 600px;
+    height: 540px;
+    justify-content: center;
+    align-items: flex-start;
+    border: 6px solid #c19a6b;
+    box-sizing: border-box;
+}
+
+#start-button {
+    margin-top: 50px;
+    padding: 12px 35px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#chess-board {
+    display: block;
+    margin: 20px auto;
+    border: 2px solid black;
+}
+
+.chess-container {
+    width: 85%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.chess-board {
+    width: 300px !important;
+    height: 300px !important;
+}
+
+#promotion-menu {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+    background-color: yellowgreen;
+    color:white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
+#promotion-menu p {
+    font-size:20px;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+#promotion-menu button {
+    margin: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#bishop-btn {
+    background-color: orange;
+}
+
+#knight-btn {
+    background-color: brown;
+}
+
+#queen-btn {
+    background-color: blue;
+}
+
+#rook-btn {
+    background-color: purple;
+}
+
+body {
+    background-image: url("../assets/images/WallPaper.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+

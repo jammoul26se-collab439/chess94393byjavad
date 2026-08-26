@@ -1,0 +1,518 @@
+var canvas = document.getElementById("chess-board");
+var ctx = canvas.getContext("2d");
+canvas.width = 480;
+canvas.height = 480;
+const squareSize = 60;
+const startScreen = document.getElementById("start-screen");
+const loadingText = document.getElementById("loading-text");
+const startBlock = document.getElementById("start-block");
+const startButton = document.getElementById("start-button");
+const timers = document.getElementById("timers");
+const whiteTimer = document.getElementById("white-timer");
+const blackTimer = document.getElementById("black-timer");
+const gameMusic = new Audio("assets/sounds/MusicPlay.mp4");
+gameMusic.loop = true;
+gameMusic.volume = 0.8;
+const checkMessage = document.getElementById("check-message");
+const gameOverMessage = document.getElementById("game-over-message");
+let loadingDots = 1;
+let loadingCycles = 0;
+const loadingInterval = setInterval(() => {
+    loadingText.textContent = "Loading" +".".repeat(loadingDots);
+    loadingDots++;
+    if(loadingDots >3) {
+        loadingDots = 1;
+        loadingCycles++;
+    }
+    if(loadingCycles === 2) {
+        clearInterval(loadingInterval);
+        loadingText.style.display = "none";
+        startBlock.style.display = "flex";
+    }
+} ,500);
+startButton.addEventListener("click" , function() {
+    startScreen.style.display = "none";
+    timers.style.display = "flex";
+    whiteTime = 24;
+    blackTime = 0;
+    currentTurn = "white";
+    updateTimers();
+    startTimer();
+    gameMusic.currentTime = 0;
+    gameMusic.play();
+})
+function drawMoveDot(position) {
+    const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const column = files.indexOf(position[0]);
+    const row = 8 - Number(position[1]);
+    const centerX = column * squareSize + squareSize / 2;
+    const centerY = row * squareSize + squareSize / 2;
+    ctx.beginPath();
+    ctx.arc(
+        centerX, centerY, 8 , 0 , Math.PI * 2
+    );
+    ctx.fillStyle = "gray";
+    ctx.fill();
+}
+function drawCaptureDotSquare(position) {
+    const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const column = files.indexOf(position[0]);
+    const row = 8 - Number(position[1]);
+    ctx.fillStyle = "red";
+    ctx.fillRect(column * squareSize , row * squareSize , squareSize , squareSize);
+    const enemy = pieces.find(
+        piece => piece.position === position 
+    );
+    if(enemy) {
+        drawPiece(enemy);
+    }
+}
+function drawBoard() { 
+for(let row = 0 ; row < 8 ; row++) {
+    for(let col = 0 ; col < 8 ; col++) {
+        if((row + col) % 2 === 0)
+            ctx.fillStyle = "white";
+        else
+            ctx.fillStyle = "black";
+        ctx.fillRect( col * squareSize,  row * squareSize,   squareSize,   squareSize );
+    }
+}
+for(let piece of pieces) {
+    drawPiece(piece);
+     }
+     drawCheckSquare();
+  }
+let selectedPiece = null;
+let validMoves = [];
+let promotionPiece = null;
+let currentTurn = "white";
+let checkedKing = null; 
+let whiteTime = 24;
+let blackTime = 0;
+let timerInterval = null;
+let gameOver = false;
+drawBoard();
+function updateTimers() {
+ whiteTimer.textContent = "00:" + String(whiteTime).padStart(2, "0"); 
+ blackTimer.textContent = "00:" + String(blackTime).padStart(2, "0");
+}
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        if(currentTurn === "white") {
+            if(whiteTime > 0) {
+                whiteTime--;
+                updateTimers();
+            }
+            if(whiteTime === 0) {
+                switchTurn();
+            }
+        }
+        else if(currentTurn === "black") {
+          if(blackTime > 0){
+          blackTime--;
+          updateTimers();
+          }
+          if(blackTime === 0) {
+            switchTurn();
+          }
+        }
+    } , 1000);
+}
+function switchTurn() {
+    selectedPiece = null;
+    validMoves = [];
+    if(currentTurn === "white") {
+        whiteTime = 0;
+        blackTime = 24;
+        currentTurn = "black";
+    }
+    else {
+        blackTime = 0;
+        whiteTime = 24;
+        currentTurn = "white";
+    }
+    updateTimers();
+    drawBoard();
+}
+function updateCheckStatus() {
+    if(isKingInCheck("white" , pieces)) {
+        checkedKing = "white";
+        checkMessage.style.display = "block";
+    }
+    else if(isKingInCheck("black" , pieces)) {
+        checkedKing = "black";
+        checkMessage.style.display = "block";
+    }
+    else {
+        checkedKing = null;
+        checkMessage.style.display = "none";
+    }
+}
+function drawCheckSquare() {
+    if(!checkedKing) {
+        return;
+    }
+    const king = pieces.find(
+        piece => piece.type === "king" && piece.color === checkedKing
+    );
+    if(!king) {
+      return;
+    }
+    const files = ["a" , "b" , "c" , "d" , "e" , "f" , "g" , "h"];
+    const column = files.indexOf(king.position[0]);
+    const row = 8 - Number(king.position[1]);
+    ctx.fillStyle = "red";
+    ctx.fillRect(column* squareSize , row*squareSize , squareSize , squareSize);
+    drawPiece(king);
+}
+
+const promotionMenu = document.getElementById("promotion-menu");
+const moveSound = new Audio("assets/sounds/move.m4a");
+function playMoveSound() {
+    moveSound.currentTime = 0;
+    moveSound.play();
+    setTimeout(() => {
+        moveSound.pause();
+        moveSound.currentTime = 0;
+    } , 400);
+}
+const killSound = new Audio("assets/sounds/kill.m4a");
+const pawnVoices = [
+    new Audio("assets/sounds/CharactersVoices/pawn1.m4a"),
+  //  new Audio("assets/sounds/CharactersVoices/pawn2.m4a"),
+    new Audio("assets/sounds/CharactersVoices/pawn3.m4a"),
+    new Audio("assets/sounds/CharactersVoices/pawn4.m4a"),
+    new Audio("assets/sounds/CharactersVoices/pawn5.m4a")
+];
+let remainingPawnVoices = [];
+const bishopVoices = [
+    new Audio("assets/sounds/CharactersVoices/bishop1.m4a"),
+    new Audio("assets/sounds/CharactersVoices/bishop2.m4a")
+];
+let remainingBishopVoices = [];
+const knightVoices = [
+    new Audio("assets/sounds/CharactersVoices/knight01.m4a"),
+    new Audio("assets/sounds/CharactersVoices/knight02.m4a")
+];
+let remainingKnightVoices = [];
+const kingVoices = [
+    new Audio("assets/sounds/CharactersVoices/king1.m4a"),
+    new Audio("assets/sounds/CharactersVoices/king2.m4a"),
+    new Audio("assets/sounds/CharactersVoices/king3.m4a")
+]
+let remainingKingVoices = [];
+const queenVoices = [
+    new Audio("assets/sounds/CharactersVoices/queen1.m4a"),
+    new Audio("assets/sounds/CharactersVoices/queen2.m4a")
+];
+let remainingQueenVoices = [];
+const rookVoices = [
+    new Audio("assets/sounds/CharactersVoices/rook1.m4a") ,
+    new Audio("assets/sounds/CharactersVoices/rook2.m4a")
+];
+let remainingRookVoices = [];
+const characterVoices = [
+    ...pawnVoices,   ...bishopVoices,  ...knightVoices,
+    ...kingVoices,   ...queenVoices,   ...rookVoices
+];
+const checkSound = new Audio("assets/sounds/Check.mp4");
+checkSound.volume = 1;
+const youWinSound = new Audio("assets/sounds/youWinSoundTrick.mp4");
+youWinSound.volume = 1;
+characterVoices.forEach(voice => {
+    voice.volume = 1;
+});
+document.getElementById("bishop-btn").addEventListener("click" , function() {
+    promotionPiece.type = "bishop";
+    promotionPiece.image = promotionPiece.color === "white" ? "assets/images/white-bishop.png" : "assets/images/black-bishop.png";
+   finishPromotion();
+});
+document.getElementById("knight-btn").addEventListener("click" , function() {
+    promotionPiece.type = "knight";
+    promotionPiece.image = promotionPiece.color === "white" ? "assets/images/white-knight.png" : "assets/images/black-knight.png";
+    finishPromotion();
+});
+document.getElementById("queen-btn").addEventListener("click" , function() {
+    promotionPiece.type = "queen";
+    promotionPiece.image = promotionPiece.color === "white" ? "assets/images/white-queen.png" : "assets/images/black-queen.png";
+    finishPromotion();
+});
+document.getElementById("rook-btn").addEventListener("click" , function() {
+    promotionPiece.type = "rook";
+    promotionPiece.image = promotionPiece.color === "white" ? "assets/images/white-rook.png" : "assets/images/black-rook.png";
+    finishPromotion();
+});
+function finishPromotion() {
+    promotionMenu.style.display = "none";
+    updateCheckStatus();
+    if(checkedKing) {
+        checkSound.currentTime = 0;
+        checkSound.play();
+        if(checkForCheckmate()) {
+            drawBoard();
+            return;
+        }
+    }
+    currentTurn = currentTurn === "white" ? "black" : "white" ;
+    drawBoard();
+}
+function playPawnVoice() {
+    if(remainingPawnVoices.length === 0) {
+        remainingPawnVoices = [...pawnVoices];
+    }
+    let randomIndex = Math.floor(
+        Math.random()* remainingPawnVoices.length
+    );
+    const voice = remainingPawnVoices[randomIndex];
+        remainingPawnVoices.splice(randomIndex , 1);
+       voice.currentTime = 0;
+       voice.play();
+}
+function playBishopVoice() {
+    if(remainingBishopVoices.length === 0) {
+        remainingBishopVoices = [...bishopVoices];
+    }
+    let randomIndex = Math.floor(
+        Math.random()*remainingBishopVoices.length
+    );
+    const voice = remainingBishopVoices[randomIndex];
+    remainingBishopVoices.splice(randomIndex , 1);
+    voice.currentTime = 0;
+    voice.play();
+}
+function playKnightVoice() {
+    if(remainingKnightVoices.length === 0) {
+        remainingKnightVoices = [...knightVoices];
+    }
+    let randomIndex = Math.floor(
+        Math.random()*remainingKnightVoices.length
+    );
+    const voice = remainingKnightVoices[randomIndex];
+    remainingKnightVoices.splice(randomIndex , 1);
+    voice.currentTime = 0;
+    voice.play();
+}
+function playKingVoice() {
+    if(remainingKingVoices.length === 0) {
+        remainingKingVoices = [...kingVoices];
+    }
+    let randomIndex = Math.floor(
+        Math.random()* remainingKingVoices.length
+    );
+    const voice = remainingKingVoices[randomIndex];
+    remainingKingVoices.splice(randomIndex , 1);
+    voice.currentTime = 0;
+    voice.play();
+}
+function playQueenVoice() {
+    if(remainingQueenVoices.length === 0) {
+        remainingQueenVoices = [...queenVoices];
+    }
+    let randomIndex = Math.floor(
+        Math.random()*remainingQueenVoices.length
+    );
+    const voice = remainingQueenVoices[randomIndex];
+    remainingQueenVoices.splice(randomIndex ,1);
+    voice.currentTime = 0;
+    voice.play();
+}
+function playRookVoice() {
+    if(remainingRookVoices.length === 0) {
+        remainingRookVoices = [...rookVoices];
+    }
+    let randomIndex = Math.floor(
+        Math.random()*remainingRookVoices.length
+    );
+    const voice = remainingRookVoices[randomIndex];
+    remainingRookVoices.splice(randomIndex , 1);
+    voice.currentTime = 0;
+    voice.play();
+}
+function isMoveLegalAgainstCheck(piece, targetPosition) {
+    const originalPosition = piece.position;
+    const capturedPiece = pieces.find(otherPiece => otherPiece.position === targetPosition && otherPiece.color !== piece.color );
+    if(capturedPiece && capturedPiece.type === "king") 
+        return false;
+    const capturedIndex = capturedPiece ? pieces.indexOf(capturedPiece): -1;
+    if(capturedPiece) 
+        pieces.splice(capturedIndex, 1);
+    piece.position = targetPosition;
+    const stillInCheck = isKingInCheck(piece.color, pieces);
+    piece.position = originalPosition;
+    if(capturedPiece) 
+        pieces.splice(capturedIndex, 0, capturedPiece);
+    return !stillInCheck;
+}
+function getLegalMoves(piece , moves) {
+    return moves.filter(move => isMoveLegalAgainstCheck(piece , move));
+}
+function hasAnyLegalMove(color) {
+    const colorPieces = pieces.filter(piece => piece.color === color);
+    for(let piece of colorPieces) {
+        const moves = getPieceMoves(piece);
+        const legalMoves = getLegalMoves(piece , moves);
+        if(legalMoves.length > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function checkForCheckmate() {
+    if(!checkedKing) {
+        return false;
+    }
+    const kingColor = checkedKing;
+    const hasLegalMove = hasAnyLegalMove(kingColor);
+    if(!hasLegalMove) {
+        endGame(kingColor);
+        return true;
+    }
+    return false;
+}
+
+function endGame(losingColor) {
+    gameOver = true;
+    clearInterval(timerInterval);
+    gameMusic.pause();
+    gameMusic.currentTime = 0;
+    selectedPiece = null;
+    validMoves = [];
+    checkMessage.style.display = "none";
+    if(losingColor === "white") {
+        gameOverMessage.textContent = "Player 02 Win";
+    }
+    else {
+        gameOverMessage.textContent = "Player 01 Win";
+    }
+    gameOverMessage.style.display = "block";
+    youWinSound.currentTime = 0;
+    youWinSound.play();
+}
+function getPieceMoves(piece) {
+    if(piece.type === "pawn")
+        return getPawnMoves(piece , pieces);
+    else if(piece.type === "queen")
+        return getQueenMoves(piece , pieces);
+    else if(piece.type === "rook")
+        return getRookMoves(piece , pieces);
+    else if(piece.type === "knight")
+        return getKnightMoves(piece , pieces);
+    else if(piece.type === "bishop")
+        return getBishopMoves(piece , pieces);
+    else
+        return getKingMoves(piece , pieces)
+    return [];
+}
+
+// validMoves
+canvas.addEventListener("click", function(event) {
+    if(gameOver) {
+        return;
+    }
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    const column = Math.floor(mouseX / squareSize);
+    const row = Math.floor(mouseY / squareSize);
+    console.log("Row:", row);
+    console.log("Column:", column);
+    const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const position = files[column] + (8 - row);
+    if(selectedPiece && validMoves.includes(position)) {
+        const capturedPiece = pieces.find( piece => piece.position === position && piece.color !== selectedPiece.color);
+       playMoveSound();
+        if(capturedPiece) {
+            setTimeout( () => {
+                 killSound.currentTime = 0;
+                 killSound.play();
+            } , 100);
+            const capturedIndex = pieces.indexOf(capturedPiece);
+            pieces.splice(capturedIndex , 1);
+        }
+        selectedPiece.position = position;
+        updateCheckStatus();
+        if(checkedKing) {
+            checkSound.currentTime = 0;
+            checkSound.play();
+        if(checkForCheckmate()) {
+            selectedPiece = null;
+            validMoves = [];
+            drawBoard();
+            return;
+        }
+    }
+        console.log("White in check: " , isKingInCheck("white", pieces));
+        console.log("Black in check: " , isKingInCheck("black" , pieces));
+        if(selectedPiece.type === "pawn" && (
+        (selectedPiece.color === "white" && selectedPiece.position[1] === "8") || (selectedPiece.color === "black" && selectedPiece.position[1] === "1")
+       )) {
+        promotionPiece = selectedPiece ;
+        promotionMenu.style.display = "block";
+       }
+       else {
+            switchTurn(); //currentTurn = currentTurn === "white" ? "black" : "white";
+       }
+       selectedPiece = null;
+       validMoves = [];
+       drawBoard();
+        return;
+    }
+    console.log("Position:", position);
+    selectedPiece = pieces.find(
+        piece => piece.position === position
+    );
+    if(selectedPiece && selectedPiece.color !== currentTurn) {
+        selectedPiece = null;
+        validMoves = [];
+        return;
+    }
+    if(selectedPiece && selectedPiece.type === "pawn") {
+        playPawnVoice();
+    }
+    if(selectedPiece && selectedPiece.type === "bishop") {
+        playBishopVoice();
+    }
+    if(selectedPiece && selectedPiece.type === "knight") {
+        playKnightVoice();
+    }
+    if(selectedPiece && selectedPiece.type === "king") {
+        playKingVoice();
+    }
+    if(selectedPiece && selectedPiece.type === "queen") {
+        playQueenVoice();
+    }
+    if(selectedPiece && selectedPiece.type === "rook") {
+        playRookVoice();
+    }
+    console.log("Selected Piece:", selectedPiece);
+    if(selectedPiece && (selectedPiece.type === "pawn" || selectedPiece.type === "queen" || selectedPiece.type === "rook" || selectedPiece.type === "knight" || selectedPiece.type === "bishop" || selectedPiece.type === "king")) {
+        if(selectedPiece.type === "pawn")
+        validMoves = getPawnMoves(selectedPiece , pieces);
+        else if(selectedPiece.type === "queen")
+            validMoves = getQueenMoves(selectedPiece , pieces);
+        else if(selectedPiece.type === "rook")
+            validMoves = getRookMoves(selectedPiece , pieces);
+        else if(selectedPiece.type === "knight")
+            validMoves = getKnightMoves(selectedPiece , pieces);
+         else if(selectedPiece.type === "bishop")
+            validMoves = getBishopMoves(selectedPiece , pieces);
+        else if(selectedPiece.type === "king")
+            validMoves = getKingMoves(selectedPiece , pieces);
+
+        validMoves = getLegalMoves(selectedPiece , validMoves);
+        const captureMoves = validMoves.filter(move => pieces.some(
+            piece => piece.position === move && piece.color !== selectedPiece.color 
+        )
+    );
+        console.log("Valid moves:", validMoves);
+        drawBoard();
+        for(let move of validMoves) {
+            if(captureMoves.includes(move)) 
+                drawCaptureDotSquare(move);
+            else 
+            drawMoveDot(move);
+        }
+    }
+});
