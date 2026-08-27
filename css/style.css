@@ -172,6 +172,145 @@ body {
     border: none;
     border-radius: 6px;
 }
+#start-block.main-menu {
+    width: 450px;
+    height: 400px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+#start-block.main-menu .menu-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: orange;
+    background-color: brown;
+    text-align: center;
+    white-space: nowrap;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
+#start-block.main-menu .menu-button {
+    width: 150px;
+    padding: 7px 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #5C3A21;
+    color: white;
+    transition: transform 0.15s ease;
+}
+#start-block.main-menu .menu-button:hover {
+    background-color: orange;
+    color: black;
+    transform: scale(1.08);
+}
+#start-block.sound-menu {
+    width: 320px;
+    height: 220px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+}
+#start-block.sound-menu .menu-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+}
+#start-block.sound-menu .menu-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+#start-block.sound-menu .menu-button {
+    width: 70px;
+    padding: 7px 8px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+#start-block.sound-menu .menu-button:first-child {
+    background-color: green;
+}
+#start-block.sound-menu .menu-button:last-child {
+    background-color: red;
+}
+#start-block.sound-menu .menu-title {
+    background-color : transparent;
+    color: white;
+}
+#start-block.difficulty-menu {
+    width: 360px;
+    height: 540px;
+    padding: 25px 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: black;
+}
+#start-block.difficulty-menu .menu-title {
+    width: 300px;
+    box-sizing: border-box;
+    background-color: green;
+    color: #fff8dc;
+    padding: 12px 15px;
+    margin: 0 0 15px 0;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 6px;
+}
+#start-block.difficulty-menu .menu-button {
+    width: 220px;
+    height: 44px;
+    padding: 8px 10px;
+    margin: 3px 0;
+    background-color: #5b2a86;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+#start-block.difficulty-menu .menu-button:hover {
+    background-color: #7137a8;
+    transform: scale(1.05);
+}
+#start-block.difficulty-menu .return-button {
+    width: 120px;
+    height: 32px;
+    padding: 5px 10px;
+    margin: 15px 0 0 0;
+    background-color: #555555;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.15s ease,  background-color 0.15s ease;
+}
+#start-block.difficulty-menu .return-button:hover {
+    background-color: #777777;
+    transform: scale(1.05);
+}
 @media (max-width: 600px) {
     .menu-title {
     font-size: 25px;
@@ -249,6 +388,30 @@ body {
         margin: 4px;
         padding: 7px 10px;
     }
+    #start-block.sound-menu {
+        width: 280px;
+        height: 190px;
+    }
+    #start-block.sound-menu .menu-title {
+        font-size: 24px;
+    }
+    #start-block.sound-menu .menu-button {
+        width: 60px;
+        padding: 5px 7px;
+        font-size: 15px;
+    }
+    #start-block.main-menu {
+        width: 330px;
+        height: 340px;
+    }
+    #start-block.main-menu .menu-title {
+        font-size: 21px;
+    }
+    #start-block.main-menu .menu-button {
+        width: 120px;
+        padding: 5px 7px;
+        font-size: 15px;
+    }
 }
 @media (min-width: 601px) and (max-width: 900px) {
     .menu-title {
@@ -317,5 +480,29 @@ body {
     #promotion-menu button {
         margin: 5px;
         padding: 8px 13px;
+    }
+    #start-block.sound-menu {
+        width: 300px;
+        height: 210px;
+    }
+    #start-block.sound-menu .menu-title {
+        font-size: 28px;
+    }
+    #start-block.sound-menu .menu-button {
+        width: 65px;
+        padding: 6px 8px;
+        font-size: 16px;
+    }
+    #start-block.main-menu {
+        width: 400px;
+        height: 380px;
+    }
+    #start-block.main-menu .menu-title {
+        font-size: 26px;
+    }
+    #start-block.main-menu .menu-button {
+        width: 135px;
+        padding: 6px 8px;
+        font-size: 16px;
     }
 }

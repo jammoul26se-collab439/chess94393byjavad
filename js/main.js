@@ -21,6 +21,14 @@ let soundsEnabled = true;
 let firstMusic = new Audio("assets/sounds/MusicPlayFirst.mp4");
 firstMusic.loop = true;
 firstMusic.volume = 0.8;
+const clickSound = new Audio("assets/sounds/ClickSoundTrack.m4a");
+clickSound.volume = 1;
+function playClickSound() {
+    if(!soundsEnabled)
+        return;
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
 function startLoading(callback) {
     startBlock.style.display = "none";
     loadingText.style.display = "block";
@@ -49,9 +57,14 @@ function setSoundsEnabled(enabled) {
     killSound.muted = !enabled;
     checkSound.muted = !enabled;
     youWinSound.muted = !enabled;
+    clickSound.muted = !enabled;
 }
 function showSoundMenu() {
+    //yesButton.addEventListener("click", playClickSound);
+    //noButton.addEventListener("click", playClickSound);
+    startBlock.classList.add("main-menu");
     startBlock.innerHTML = "";
+    startBlock.classList.add("sound-menu");
     const title = document.createElement("div");
     title.textContent = "Enable Sounds?";
     title.className = "menu-title";
@@ -82,9 +95,12 @@ function showSoundMenu() {
     startBlock.style.display = "flex";
 }
 function showMainMenu() {
+    startBlock.classList.remove("sound-menu");
+    startBlock.classList.remove("difficulty-menu");
+    startBlock.classList.add("main-menu");
     startBlock.innerHTML = "";
     const title = document.createElement("div");
-    title.textContent = "CHESS";
+    title.textContent = "Chess Game By Jawad Jammoul";
     title.className = "menu-title";
     const startButton = document.createElement("button");
     startButton.textContent = "Start";
@@ -98,14 +114,20 @@ function showMainMenu() {
     const exitButton = document.createElement("button");
     exitButton.textContent = "Exit";
     exitButton.className = "menu-button";
+    startButton.addEventListener("click", playClickSound);
+    optionsButton.addEventListener("click", playClickSound);
+    aboutButton.addEventListener("click", playClickSound);
+    exitButton.addEventListener("click", playClickSound);
     startButton.addEventListener("click", function() {
         showDifficultyMenu();
     });
     optionsButton.addEventListener("click", function() {
     });
     aboutButton.addEventListener("click", function() {
+        window.location.href = "https://mypersonalmainpage5600.jammoul26.workers.dev/";
     });
     exitButton.addEventListener("click", function() {
+        window.location.href = "https://www.google.com";
     });
     startBlock.appendChild(title);
     startBlock.appendChild(startButton);
@@ -140,6 +162,9 @@ function drawCaptureDotSquare(position) {
       drawPiece(enemy);
 }
 function showDifficultyMenu() {
+    startBlock.classList.remove("main-menu");
+    startBlock.classList.remove("sound-menu");
+    startBlock.classList.add("difficulty-menu");
     startBlock.innerHTML = "";
     const title = document.createElement("div");
     title.textContent = "Please Select Difficulty";
@@ -154,14 +179,20 @@ function showDifficultyMenu() {
     hardButton.textContent = "Hard AI";
     hardButton.className = "menu-button";
     const twoPlayersButton = document.createElement("button");
-    twoPlayersButton.textContent = "2 Outside Players";
+    twoPlayersButton.textContent = "2 Players";
     twoPlayersButton.className = "menu-button";
     const makhloutaButton = document.createElement("button");
-    makhloutaButton.textContent = "Makhlouta";
+    makhloutaButton.textContent = "Makhlouta AI";
     makhloutaButton.className = "menu-button";
     const returnButton = document.createElement("button");
     returnButton.textContent = "Return";
     returnButton.className = "return-button";
+    easyButton.addEventListener("click", playClickSound);
+    normalButton.addEventListener("click", playClickSound);
+    hardButton.addEventListener("click", playClickSound);
+    twoPlayersButton.addEventListener("click", playClickSound);
+    makhloutaButton.addEventListener("click", playClickSound);
+    returnButton.addEventListener("click", playClickSound);
     easyButton.addEventListener("click", function() {
     });
     normalButton.addEventListener("click", function() {
@@ -671,5 +702,3 @@ canvas.addEventListener("click", function(event) {
         }
     }
 });
-
-//startTwoPlayersGame()
