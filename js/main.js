@@ -17,30 +17,103 @@ const checkMessage = document.getElementById("check-message");
 const gameOverMessage = document.getElementById("game-over-message");
 let loadingDots = 1;
 let loadingCycles = 0;
-const loadingInterval = setInterval(() => {
-    loadingText.textContent = "Loading" +".".repeat(loadingDots);
-    loadingDots++;
-    if(loadingDots >3) {
-        loadingDots = 1;
-        loadingCycles++;
-    }
-    if(loadingCycles === 2) {
-        clearInterval(loadingInterval);
-        loadingText.style.display = "none";
-        startBlock.style.display = "flex";
-    }
-} ,500);
-startButton.addEventListener("click" , function() {
-    startScreen.style.display = "none";
-    timers.style.display = "flex";
-    whiteTime = 24;
-    blackTime = 0;
-    currentTurn = "white";
-    updateTimers();
-    startTimer();
-    gameMusic.currentTime = 0;
-    gameMusic.play();
-})
+let soundsEnabled = true;
+let firstMusic = new Audio("assets/sounds/MusicPlayFirst.mp4");
+firstMusic.loop = true;
+firstMusic.volume = 0.8;
+function startLoading(callback) {
+    startBlock.style.display = "none";
+    loadingText.style.display = "block";
+    loadingDots = 1;
+    loadingCycles = 0;
+    const loadingInterval = setInterval(() => {
+        loadingText.textContent = "Loading" + ".".repeat(loadingDots);
+        loadingDots++;
+        if(loadingDots > 3) {
+            loadingDots = 1;
+            loadingCycles++;
+        }
+        if(loadingCycles === 2) {
+            clearInterval(loadingInterval);
+            loadingText.style.display = "none";
+            if(callback)
+              callback();
+        }
+    }, 500);
+}
+function setSoundsEnabled(enabled) {
+    soundsEnabled = enabled;
+    gameMusic.muted = !enabled;
+    firstMusic.muted = !enabled;
+    moveSound.muted = !enabled;
+    killSound.muted = !enabled;
+    checkSound.muted = !enabled;
+    youWinSound.muted = !enabled;
+}
+function showSoundMenu() {
+    startBlock.innerHTML = "";
+    const title = document.createElement("div");
+    title.textContent = "Enable Sounds?";
+    title.className = "menu-title";
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.className = "menu-buttons";
+    const yesButton = document.createElement("button");
+    yesButton.textContent = "YES";
+    yesButton.className = "menu-button";
+    const noButton = document.createElement("button");
+    noButton.textContent = "NO";
+    noButton.className = "menu-button";
+    yesButton.addEventListener("click", function() {
+        setSoundsEnabled(true);
+        startLoading(showMainMenu);
+        firstMusic.currentTime = 0;
+        firstMusic.play();
+    });
+    noButton.addEventListener("click", function() {
+        setSoundsEnabled(false);
+        firstMusic.pause();
+        firstMusic.currentTime = 0;
+        startLoading(showMainMenu);
+    });
+    buttonsContainer.appendChild(yesButton);
+    buttonsContainer.appendChild(noButton);
+    startBlock.appendChild(title);
+    startBlock.appendChild(buttonsContainer);
+    startBlock.style.display = "flex";
+}
+function showMainMenu() {
+    startBlock.innerHTML = "";
+    const title = document.createElement("div");
+    title.textContent = "CHESS";
+    title.className = "menu-title";
+    const startButton = document.createElement("button");
+    startButton.textContent = "Start";
+    startButton.className = "menu-button";
+    const optionsButton = document.createElement("button");
+    optionsButton.textContent = "Options";
+    optionsButton.className = "menu-button";
+    const aboutButton = document.createElement("button");
+    aboutButton.textContent = "About-Us";
+    aboutButton.className = "menu-button";
+    const exitButton = document.createElement("button");
+    exitButton.textContent = "Exit";
+    exitButton.className = "menu-button";
+    startButton.addEventListener("click", function() {
+        showDifficultyMenu();
+    });
+    optionsButton.addEventListener("click", function() {
+    });
+    aboutButton.addEventListener("click", function() {
+    });
+    exitButton.addEventListener("click", function() {
+    });
+    startBlock.appendChild(title);
+    startBlock.appendChild(startButton);
+    startBlock.appendChild(optionsButton);
+    startBlock.appendChild(aboutButton);
+    startBlock.appendChild(exitButton);
+    startBlock.style.display = "flex";
+}
 function drawMoveDot(position) {
     const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
     const column = files.indexOf(position[0]);
@@ -63,9 +136,73 @@ function drawCaptureDotSquare(position) {
     const enemy = pieces.find(
         piece => piece.position === position 
     );
-    if(enemy) {
-        drawPiece(enemy);
-    }
+    if(enemy)
+      drawPiece(enemy);
+}
+function showDifficultyMenu() {
+    startBlock.innerHTML = "";
+    const title = document.createElement("div");
+    title.textContent = "Please Select Difficulty";
+    title.className = "menu-title";
+    const easyButton = document.createElement("button");
+    easyButton.textContent = "Easy AI";
+    easyButton.className = "menu-button";
+    const normalButton = document.createElement("button");
+    normalButton.textContent = "Normal AI";
+    normalButton.className = "menu-button";
+    const hardButton = document.createElement("button");
+    hardButton.textContent = "Hard AI";
+    hardButton.className = "menu-button";
+    const twoPlayersButton = document.createElement("button");
+    twoPlayersButton.textContent = "2 Outside Players";
+    twoPlayersButton.className = "menu-button";
+    const makhloutaButton = document.createElement("button");
+    makhloutaButton.textContent = "Makhlouta";
+    makhloutaButton.className = "menu-button";
+    const returnButton = document.createElement("button");
+    returnButton.textContent = "Return";
+    returnButton.className = "return-button";
+    easyButton.addEventListener("click", function() {
+    });
+    normalButton.addEventListener("click", function() {
+    });
+    hardButton.addEventListener("click", function() {
+    });
+    makhloutaButton.addEventListener("click", function() {
+    });
+    twoPlayersButton.addEventListener("click", function() {
+        startTwoPlayersGame();
+    });
+    returnButton.addEventListener("click", function() {
+        showMainMenu();
+    });
+    startBlock.appendChild(title);
+    startBlock.appendChild(easyButton);
+    startBlock.appendChild(normalButton);
+    startBlock.appendChild(hardButton);
+    startBlock.appendChild(twoPlayersButton);
+    startBlock.appendChild(makhloutaButton);
+    startBlock.appendChild(returnButton);
+    startBlock.style.display = "flex";
+}
+function startTwoPlayersGame() {
+    startScreen.style.display = "none";
+    firstMusic.pause();
+    firstMusic.currentTime = 0;
+    startLoading(function() {
+        timers.style.display = "flex";
+        whiteTime = 24;
+        blackTime = 0;
+        currentTurn = "white";
+        gameOver = false;
+        updateTimers();
+        startTimer();
+        if(soundsEnabled) {
+            gameMusic.currentTime = 0;
+            gameMusic.play();
+        }
+        drawBoard();
+    });
 }
 function drawBoard() { 
 for(let row = 0 ; row < 8 ; row++) {
@@ -170,6 +307,8 @@ function drawCheckSquare() {
 const promotionMenu = document.getElementById("promotion-menu");
 const moveSound = new Audio("assets/sounds/move.m4a");
 function playMoveSound() {
+    if(!soundsEnabled)
+        return;
     moveSound.currentTime = 0;
     moveSound.play();
     setTimeout(() => {
@@ -180,7 +319,7 @@ function playMoveSound() {
 const killSound = new Audio("assets/sounds/kill.m4a");
 const pawnVoices = [
     new Audio("assets/sounds/CharactersVoices/pawn1.m4a"),
-  //  new Audio("assets/sounds/CharactersVoices/pawn2.m4a"),
+  //  new Audio("assets/sounds/CharactersVoices/pawn2.m4a")
     new Audio("assets/sounds/CharactersVoices/pawn3.m4a"),
     new Audio("assets/sounds/CharactersVoices/pawn4.m4a"),
     new Audio("assets/sounds/CharactersVoices/pawn5.m4a")
@@ -220,8 +359,8 @@ const checkSound = new Audio("assets/sounds/Check.mp4");
 checkSound.volume = 1;
 const youWinSound = new Audio("assets/sounds/youWinSoundTrick.mp4");
 youWinSound.volume = 1;
-characterVoices.forEach(voice => {
-    voice.volume = 1;
+startLoading(function() {
+    showSoundMenu();
 });
 document.getElementById("bishop-btn").addEventListener("click" , function() {
     promotionPiece.type = "bishop";
@@ -247,8 +386,10 @@ function finishPromotion() {
     promotionMenu.style.display = "none";
     updateCheckStatus();
     if(checkedKing) {
-        checkSound.currentTime = 0;
-        checkSound.play();
+        if(soundsEnabled) {
+             checkSound.currentTime = 0;
+             checkSound.play();
+        }
         if(checkForCheckmate()) {
             drawBoard();
             return;
@@ -258,6 +399,8 @@ function finishPromotion() {
     drawBoard();
 }
 function playPawnVoice() {
+    if(!soundsEnabled)
+        return
     if(remainingPawnVoices.length === 0) {
         remainingPawnVoices = [...pawnVoices];
     }
@@ -270,6 +413,8 @@ function playPawnVoice() {
        voice.play();
 }
 function playBishopVoice() {
+    if(!soundsEnabled)
+        return
     if(remainingBishopVoices.length === 0) {
         remainingBishopVoices = [...bishopVoices];
     }
@@ -282,6 +427,8 @@ function playBishopVoice() {
     voice.play();
 }
 function playKnightVoice() {
+    if(!soundsEnabled)
+        return
     if(remainingKnightVoices.length === 0) {
         remainingKnightVoices = [...knightVoices];
     }
@@ -294,6 +441,8 @@ function playKnightVoice() {
     voice.play();
 }
 function playKingVoice() {
+    if(!soundsEnabled)
+        return
     if(remainingKingVoices.length === 0) {
         remainingKingVoices = [...kingVoices];
     }
@@ -306,6 +455,8 @@ function playKingVoice() {
     voice.play();
 }
 function playQueenVoice() {
+    if(!soundsEnabled)
+        return
     if(remainingQueenVoices.length === 0) {
         remainingQueenVoices = [...queenVoices];
     }
@@ -318,6 +469,8 @@ function playQueenVoice() {
     voice.play();
 }
 function playRookVoice() {
+    if(!soundsEnabled)
+        return
     if(remainingRookVoices.length === 0) {
         remainingRookVoices = [...rookVoices];
     }
@@ -358,7 +511,6 @@ function hasAnyLegalMove(color) {
     }
     return false;
 }
-
 function checkForCheckmate() {
     if(!checkedKing) {
         return false;
@@ -371,7 +523,6 @@ function checkForCheckmate() {
     }
     return false;
 }
-
 function endGame(losingColor) {
     gameOver = true;
     clearInterval(timerInterval);
@@ -387,8 +538,10 @@ function endGame(losingColor) {
         gameOverMessage.textContent = "Player 01 Win";
     }
     gameOverMessage.style.display = "block";
-    youWinSound.currentTime = 0;
-    youWinSound.play();
+    if(soundsEnabled) {
+        youWinSound.currentTime = 0;
+        youWinSound.play();
+    }
 }
 function getPieceMoves(piece) {
     if(piece.type === "pawn")
@@ -405,8 +558,6 @@ function getPieceMoves(piece) {
         return getKingMoves(piece , pieces)
     return [];
 }
-
-// validMoves
 canvas.addEventListener("click", function(event) {
     if(gameOver) {
         return;
@@ -425,8 +576,10 @@ canvas.addEventListener("click", function(event) {
        playMoveSound();
         if(capturedPiece) {
             setTimeout( () => {
-                 killSound.currentTime = 0;
-                 killSound.play();
+                if(soundsEnabled) {
+                    killSound.currentTime = 0;
+                    killSound.play();
+                }
             } , 100);
             const capturedIndex = pieces.indexOf(capturedPiece);
             pieces.splice(capturedIndex , 1);
@@ -434,8 +587,10 @@ canvas.addEventListener("click", function(event) {
         selectedPiece.position = position;
         updateCheckStatus();
         if(checkedKing) {
-            checkSound.currentTime = 0;
-            checkSound.play();
+            if(soundsEnabled) {
+                checkSound.currentTime = 0;
+                checkSound.play();
+            }
         if(checkForCheckmate()) {
             selectedPiece = null;
             validMoves = [];
@@ -452,7 +607,7 @@ canvas.addEventListener("click", function(event) {
         promotionMenu.style.display = "block";
        }
        else {
-            switchTurn(); //currentTurn = currentTurn === "white" ? "black" : "white";
+            switchTurn(); 
        }
        selectedPiece = null;
        validMoves = [];
@@ -516,3 +671,5 @@ canvas.addEventListener("click", function(event) {
         }
     }
 });
+
+//startTwoPlayersGame()

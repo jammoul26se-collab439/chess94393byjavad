@@ -23,7 +23,6 @@
     padding: 15px 25px;
     z-index: 1000;
 }
-
 #timers {
     display: none;
     position: fixed;
@@ -36,7 +35,6 @@
     z-index: 500;
     pointer-events: none;
 }
-
 #white-timer, #black-timer {
     font-size: 28px;
     font-weight: bold;
@@ -45,7 +43,6 @@
     padding: 5px 12px;
     border-radius: 5px;
 }
-
 #start-screen {
     position: fixed;
     top: 0;
@@ -60,12 +57,10 @@
     align-items: center;
     z-index: 9999;
 }
-
 #loading-text {
     font-size: 32px;
     font-weight: bold;
 }
-
 #start-block {
     display: none;
     background: black;
@@ -76,31 +71,26 @@
     border: 6px solid #c19a6b;
     box-sizing: border-box;
 }
-
 #start-button {
     margin-top: 50px;
     padding: 12px 35px;
     font-size: 22px;
     cursor: pointer;
 }
-
 #chess-board {
     display: block;
     margin: 20px auto;
     border: 2px solid black;
 }
-
 .chess-container {
     width: 85%;
     margin: 0 auto;
     text-align: center;
 }
-
 .chess-board {
     width: 300px !important;
     height: 300px !important;
 }
-
 #promotion-menu {
     display: none;
     position: fixed;
@@ -119,7 +109,6 @@
     white-space: nowrap;
     font-weight: bold;
 }
-
 #promotion-menu button {
     margin: 5px;
     padding: 8px 15px;
@@ -128,23 +117,18 @@
     border: none;
     border-radius: 5px;
 }
-
 #bishop-btn {
     background-color: orange;
 }
-
 #knight-btn {
     background-color: brown;
 }
-
 #queen-btn {
     background-color: blue;
 }
-
 #rook-btn {
     background-color: purple;
 }
-
 body {
     background-image: url("../assets/images/WallPaper.jpeg");
     background-size: cover;
@@ -152,20 +136,69 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
-
-
-/* ============================= */
-/* 📱 Mobile Devices - max 600px */
-/* ============================= */
-
+.menu-title {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 45px;
+    margin-bottom: 30px;
+}
+.menu-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+.menu-button {
+    display: block;
+    width: 240px;
+    padding: 12px 20px;
+    margin: 10px auto;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+}
+.return-button {
+    display: block;
+    width: 180px;
+    padding: 10px 20px;
+    margin: 20px auto 0;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+}
 @media (max-width: 600px) {
-
+    .menu-title {
+    font-size: 25px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+.menu-buttons {
+    flex-direction: column;
+    gap: 5px;
+}
+.menu-button {
+    width: 180px;
+    padding: 10px 15px;
+    font-size: 18px;
+    margin: 7px auto;
+}
+.return-button {
+    width: 150px;
+    padding: 9px 15px;
+    font-size: 17px;
+    margin-top: 15px;
+}
     #game-over-message {
         font-size: 24px;
         width: 240px;
         padding: 10px 15px;
     }
-
     #check-message {
         left: 50%;
         top: 50%;
@@ -173,34 +206,28 @@ body {
         font-size: 22px;
         padding: 12px 18px;
     }
-
     #timers {
         top: 8px;
         padding: 0 10px;
     }
-
     #white-timer,
     #black-timer {
         font-size: 22px;
         padding: 4px 8px;
     }
-
     #start-block {
         width: 90%;
         height: 450px;
         border-width: 4px;
     }
-
     #start-button {
         margin-top: 40px;
         padding: 10px 25px;
         font-size: 20px;
     }
-
     #loading-text {
         font-size: 26px;
     }
-
     #chess-board {
         max-width: 95vw;
         max-height: 95vw;
@@ -208,39 +235,40 @@ body {
         height: 95vw;
         margin: 15px auto;
     }
-
     .chess-container {
         width: 100%;
     }
-
     #promotion-menu {
         width: 80%;
         padding: 18px;
     }
-
     #promotion-menu p {
         font-size: 17px;
     }
-
     #promotion-menu button {
         margin: 4px;
         padding: 7px 10px;
     }
 }
-
-
-/* ============================= */
-/* 📱 Tablet Devices - max 900px */
-/* ============================= */
-
 @media (min-width: 601px) and (max-width: 900px) {
-
+    .menu-title {
+    font-size: 30px;
+    margin-top: 40px;
+    margin-bottom: 25px;
+}
+.menu-button {
+    width: 220px;
+    font-size: 20px;
+}
+.return-button {
+    width: 170px;
+    font-size: 19px;
+}
     #game-over-message {
         font-size: 26px;
         width: 270px;
         padding: 10px 18px;
     }
-
     #check-message {
         left: 50%;
         top: 50%;
@@ -248,33 +276,27 @@ body {
         font-size: 24px;
         padding: 13px 20px;
     }
-
     #timers {
         top: 10px;
         padding: 0 18px;
     }
-
     #white-timer,
     #black-timer {
         font-size: 25px;
         padding: 5px 10px;
     }
-
     #start-block {
         width: 75%;
         height: 500px;
     }
-
     #start-button {
         margin-top: 45px;
         padding: 11px 30px;
         font-size: 21px;
     }
-
     #loading-text {
         font-size: 30px;
     }
-
     #chess-board {
         max-width: 90vw;
         max-height: 90vw;
@@ -282,20 +304,16 @@ body {
         height: 90vw;
         margin: 18px auto;
     }
-
     .chess-container {
         width: 95%;
     }
-
     #promotion-menu {
         width: 70%;
         padding: 22px;
     }
-
     #promotion-menu p {
         font-size: 19px;
     }
-
     #promotion-menu button {
         margin: 5px;
         padding: 8px 13px;
