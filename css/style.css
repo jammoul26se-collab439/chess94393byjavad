@@ -313,26 +313,26 @@ body {
 }
 @media (max-width: 600px) {
     .menu-title {
-    font-size: 25px;
-    margin-top: 30px;
-    margin-bottom: 20px;
-}
-.menu-buttons {
-    flex-direction: column;
-    gap: 5px;
-}
-.menu-button {
-    width: 180px;
-    padding: 10px 15px;
-    font-size: 18px;
-    margin: 7px auto;
-}
-.return-button {
-    width: 150px;
-    padding: 9px 15px;
-    font-size: 17px;
-    margin-top: 15px;
-}
+        font-size: 25px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+    .menu-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .menu-button {
+        width: 180px;
+        padding: 10px 15px;
+        font-size: 18px;
+        margin: 7px auto;
+    }
+    .return-button {
+        width: 150px;
+        padding: 9px 15px;
+        font-size: 17px;
+        margin-top: 15px;
+    }
     #game-over-message {
         font-size: 24px;
         width: 240px;
@@ -366,16 +366,11 @@ body {
     }
     #loading-text {
         font-size: 26px;
-    }
-    #chess-board {
-        max-width: 95vw;
-        max-height: 95vw;
-        width: 95vw;
-        height: 95vw;
-        margin: 15px auto;
-    }
-    .chess-container {
-        width: 100%;
+        position: absolute;
+        top: 42%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        white-space: nowrap;
     }
     #promotion-menu {
         width: 80%;
@@ -391,18 +386,25 @@ body {
     #start-block.sound-menu {
         width: 280px;
         height: 190px;
+        transform: translateY(-25px);
     }
     #start-block.sound-menu .menu-title {
         font-size: 24px;
     }
+    #start-block.sound-menu .menu-buttons {
+        flex-direction: row;
+        gap: 12px;
+    }
     #start-block.sound-menu .menu-button {
-        width: 60px;
+        width: 65px;
         padding: 5px 7px;
         font-size: 15px;
+        margin: 0;
     }
     #start-block.main-menu {
         width: 330px;
         height: 340px;
+        transform: translateY(-25px);
     }
     #start-block.main-menu .menu-title {
         font-size: 21px;
@@ -411,6 +413,44 @@ body {
         width: 120px;
         padding: 5px 7px;
         font-size: 15px;
+    }
+    #start-block.difficulty-menu {
+        width: 330px;
+        height: 500px;
+        min-height: 0;
+        padding: 20px;
+        transform: translateY(-25px);
+    }
+    #start-block.difficulty-menu .menu-title {
+        width: 280px;
+        font-size: 20px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+    }
+    #start-block.difficulty-menu .menu-button {
+        width: 200px;
+        height: 42px;
+        font-size: 16px;
+        margin: 3px 0;
+    }
+    #start-block.difficulty-menu .return-button {
+        width: 120px;
+        height: 32px;
+        font-size: 14px;
+        margin-top: 12px;
+    }
+    #chess-board {
+        display: block;
+        width: 95vw !important;
+        height: 95vw !important;
+        max-width: 95vw;
+        max-height: 95vw;
+        margin: 90px auto 15px;
+        border: 2px solid black;
+        touch-action: manipulation;
+    }
+    .chess-container {
+        width: 100%;
     }
 }
 @media (min-width: 601px) and (max-width: 900px) {

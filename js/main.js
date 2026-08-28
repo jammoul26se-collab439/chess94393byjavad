@@ -594,8 +594,10 @@ canvas.addEventListener("click", function(event) {
         return;
     }
     const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mouseX = (event.clientX - rect.left) * scaleX;
+    const mouseY = (event.clientY - rect.top) * scaleY ;
     const column = Math.floor(mouseX / squareSize);
     const row = Math.floor(mouseY / squareSize);
     console.log("Row:", row);
