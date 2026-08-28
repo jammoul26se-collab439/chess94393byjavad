@@ -16,6 +16,7 @@ gameMusic.volume = 0.8;
 const checkMessage = document.getElementById("check-message");
 const gameOverMessage = document.getElementById("game-over-message");
 let loadingDots = 1;
+let gameStarted = false;
 let loadingCycles = 0;
 let soundsEnabled = true;
 let firstMusic = new Audio("assets/sounds/MusicPlayFirst.mp4");
@@ -221,6 +222,7 @@ function startTwoPlayersGame() {
     firstMusic.pause();
     firstMusic.currentTime = 0;
     startLoading(function() {
+        gameStarted = true;
         timers.style.display = "flex";
         whiteTime = 24;
         blackTime = 0;
@@ -590,6 +592,8 @@ function getPieceMoves(piece) {
     return [];
 }
 canvas.addEventListener("click", function(event) {
+    if(!gameStarted)
+        return;
     if(gameOver) {
         return;
     }
