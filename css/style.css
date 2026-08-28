@@ -385,18 +385,18 @@ body {
     }
     #start-block.sound-menu {
         width: 280px;
-        height: 190px;
+        height: 160px;
         transform: translateY(-25px);
     }
     #start-block.sound-menu .menu-title {
         font-size: 24px;
+        margin-bottom: 5px;
     }
     #start-block.sound-menu .menu-buttons {
-        flex-direction: row;
-        gap: 12px;
+        gap: 10px;
     }
     #start-block.sound-menu .menu-button {
-        width: 65px;
+        width: 60px;
         padding: 5px 7px;
         font-size: 15px;
         margin: 0;
