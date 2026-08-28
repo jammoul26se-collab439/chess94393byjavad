@@ -414,7 +414,7 @@ body {
     #start-block.main-menu {
         width: 330px;
         height: 340px;
-        transform: translateY(-30px);
+        transform: translateY(-50px);
     }
     #start-block.main-menu .menu-title {
         font-size: 21px;
