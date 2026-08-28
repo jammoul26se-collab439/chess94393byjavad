@@ -386,14 +386,20 @@ body {
     #start-block.sound-menu {
         width: 280px;
         height: 160px;
-        transform: translateY(-25px);
+        padding: 10px 20px;
+        gap: 5px;
     }
     #start-block.sound-menu .menu-title {
         font-size: 24px;
-        margin-bottom: 5px;
+        margin: 0 0 5px 0;
+        padding: 0;
     }
     #start-block.sound-menu .menu-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         gap: 10px;
+        margin: 0;
     }
     #start-block.sound-menu .menu-button {
         width: 60px;
