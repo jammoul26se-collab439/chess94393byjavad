@@ -127,7 +127,7 @@ function showMainMenu() {
         showOptionsMenu();
     });
     aboutButton.addEventListener("click", function() {
-        window.location.href = "https://mypersonalmainpage5600.jammoul26.workers.dev/";
+        window.location.href = "https://mypersonalmainpage5600.jammoul26se.workers.dev/";
     });
     exitButton.addEventListener("click", function() {
         window.location.href = "https://www.google.com";
