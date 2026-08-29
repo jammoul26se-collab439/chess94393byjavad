@@ -84,6 +84,7 @@ function showSoundMenu() {
     });
     noButton.addEventListener("click", function() {
         setSoundsEnabled(false);
+        musicEnabled = false;
         firstMusic.pause();
         firstMusic.currentTime = 0;
         startLoading(showMainMenu);
@@ -183,6 +184,16 @@ function showOptionsMenu() {
         gameMusic.muted = !musicEnabled;
         firstMusic.muted = !musicEnabled;
         youWinSound.muted = !musicEnabled;
+        if(musicEnabled) {
+            if(gameStarted)
+                gameMusic.play();
+            else
+                firstMusic.play();
+        }
+        else {
+            gameMusic.pause();
+            firstMusic.pause();
+        }
         updateMusicButton();
     });
     soundButton.addEventListener("click", function() {
