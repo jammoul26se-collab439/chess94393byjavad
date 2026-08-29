@@ -274,6 +274,7 @@ function showDifficultyMenu() {
     makhloutaButton.addEventListener("click", playClickSound);
     returnButton.addEventListener("click", playClickSound);
     easyButton.addEventListener("click", function() {
+        startEasyAIGame();
     });
     normalButton.addEventListener("click", function() {
     });
@@ -300,6 +301,7 @@ function startTwoPlayersGame() {
     startScreen.style.display = "none";
     firstMusic.pause();
     firstMusic.currentTime = 0;
+    gameMode = "2players";
     startLoading(function() {
         gameStarted = true;
         timers.style.display = "flex";
@@ -307,14 +309,117 @@ function startTwoPlayersGame() {
         blackTime = 0;
         currentTurn = "white";
         gameOver = false;
+        if(aiMoveTimeout) {
+            clearTimeout(aiMoveTimeout);
+            aiMoveTimeout = null;
+        }
         updateTimers();
         startTimer();
-        if(soundsEnabled) {
+        if(soundsEnabled && musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
         }
         drawBoard();
     });
+}
+function startEasyAIGame() {
+    startScreen.style.display = "none";
+    firstMusic.pause();
+    firstMusic.currentTime = 0;
+    gameMode = "easyAI";
+    startLoading(function() {
+        gameStarted = true;
+        timers.style.display = "flex";
+        whiteTime = 24;
+        blackTime = 0;
+        currentTurn = "white";
+        gameOver = false;
+        if(aiMoveTimeout) {
+            clearTimeout(aiMoveTimeout);
+            aiMoveTimeout = null;
+        }
+        updateTimers();
+        startTimer();
+        if(soundsEnabled && musicEnabled) {
+            gameMusic.currentTime = 0;
+            gameMusic.play();
+        }
+        drawBoard();
+    });
+}
+function makeEasyAIMove() {
+    if(gameOver)
+        return;
+    if(gameMode !== "easyAI")
+        return;
+    if(currentTurn !== "black")
+        return;
+    const blackPieces = pieces.filter(
+        piece => piece.color === "black"
+    );
+    let allLegalMoves = [];
+    for(let piece of blackPieces) {
+        const moves = getPieceMoves(piece);
+        const legalMoves = getLegalMoves(
+            piece,
+            moves
+        );
+        for(let move of legalMoves) {
+            allLegalMoves.push({
+                piece: piece,
+                move: move
+            });
+        }
+    }
+    if(allLegalMoves.length === 0) {
+        updateCheckStatus();
+        if(checkedKing === "black") {
+            endGame("black");
+        }
+        return;
+    }
+    const randomIndex = Math.floor(
+        Math.random() * allLegalMoves.length
+    );
+    const selectedAIMove = allLegalMoves[randomIndex];
+    const aiPiece = selectedAIMove.piece;
+    const targetPosition = selectedAIMove.move;
+    const capturedPiece = pieces.find(
+        piece =>
+            piece.position === targetPosition &&
+            piece.color !== aiPiece.color
+    );
+    playMoveSound();
+    if(capturedPiece) {
+        const capturedIndex = pieces.indexOf(
+            capturedPiece
+        );
+        pieces.splice(capturedIndex, 1);
+        setTimeout(() => {
+            if(soundsEnabled) {
+                killSound.currentTime = 0;
+                killSound.play();
+            }
+        }, 100);
+    }
+    aiPiece.position = targetPosition;
+    updateCheckStatus();
+    if(checkedKing) {
+        if(soundsEnabled) {
+            checkSound.currentTime = 0;
+            checkSound.play();
+        }
+        if(checkForCheckmate()) {
+            drawBoard();
+            return;
+        }
+    }
+    if(aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
+        aiPiece.type = "queen";
+        aiPiece.image = "assets/images/black-queen.png";
+    }
+    switchTurn();
+    drawBoard();
 }
 function drawBoard() { 
 for(let row = 0 ; row < 8 ; row++) {
@@ -339,6 +444,8 @@ let checkedKing = null;
 let whiteTime = 24;
 let blackTime = 0;
 let timerInterval = null;
+let gameMode = "2players";
+let aiMoveTimeout = null;
 let gameOver = false;
 drawBoard();
 function updateTimers() {
@@ -375,14 +482,22 @@ function switchTurn() {
         whiteTime = 0;
         blackTime = 24;
         currentTurn = "black";
+        updateTimers();
+        drawBoard();
+        if(gameMode === "easyAI") {
+            const randomDelay = Math.floor(Math.random() * 5000) + 1000;
+            aiMoveTimeout = setTimeout(() => {
+                makeEasyAIMove();
+            }, randomDelay);
+        }
     }
     else {
         blackTime = 0;
         whiteTime = 24;
         currentTurn = "white";
+        updateTimers();
+        drawBoard();
     }
-    updateTimers();
-    drawBoard();
 }
 function updateCheckStatus() {
     if(isKingInCheck("white" , pieces)) {
@@ -643,14 +758,22 @@ function endGame(losingColor) {
     selectedPiece = null;
     validMoves = [];
     checkMessage.style.display = "none";
+    if(gameMode === "easyAI") {
     if(losingColor === "white") {
-        gameOverMessage.textContent = "Player 02 Win";
+        gameOverMessage.textContent = "Easy Ai Win";
     }
     else {
-        gameOverMessage.textContent = "Player 01 Win";
+        gameOverMessage.textContent = "Player Win";
     }
+}
+else {
+    if(losingColor === "white") 
+        gameOverMessage.textContent = "Player 02 Win";
+    else
+        gameOverMessage.textContent = "Player 01 Win";
+}
     gameOverMessage.style.display = "block";
-    if(soundsEnabled) {
+    if(soundsEnabled && musicEnabled) {
         youWinSound.currentTime = 0;
         youWinSound.play();
     }
@@ -734,6 +857,11 @@ canvas.addEventListener("click", function(event) {
     selectedPiece = pieces.find(
         piece => piece.position === position
     );
+    if(gameMode === "easyAI" && currentTurn === "black") {
+    selectedPiece = null;
+    validMoves = [];
+    return;
+}
     if(selectedPiece && selectedPiece.color !== currentTurn) {
         selectedPiece = null;
         validMoves = [];
@@ -786,4 +914,4 @@ canvas.addEventListener("click", function(event) {
         }
     }
 });
-// const musicEnabled gameMusic.pause()
+// const musicEnabled gameMusic.pause() switchTurn() endGame()
