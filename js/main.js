@@ -19,6 +19,7 @@ let loadingDots = 1;
 let gameStarted = false;
 let loadingCycles = 0;
 let soundsEnabled = true;
+let musicEnabled = true;
 let firstMusic = new Audio("assets/sounds/MusicPlayFirst.mp4");
 firstMusic.loop = true;
 firstMusic.volume = 0.8;
@@ -52,8 +53,6 @@ function startLoading(callback) {
 }
 function setSoundsEnabled(enabled) {
     soundsEnabled = enabled;
-    gameMusic.muted = !enabled;
-    firstMusic.muted = !enabled;
     moveSound.muted = !enabled;
     killSound.muted = !enabled;
     checkSound.muted = !enabled;
@@ -96,6 +95,8 @@ function showSoundMenu() {
     startBlock.style.display = "flex";
 }
 function showMainMenu() {
+    startBlock.className = "main-menu";
+    startBlock.innerHTML = "";
     startBlock.classList.remove("sound-menu");
     startBlock.classList.remove("difficulty-menu");
     startBlock.classList.add("main-menu");
@@ -123,6 +124,7 @@ function showMainMenu() {
         showDifficultyMenu();
     });
     optionsButton.addEventListener("click", function() {
+        showOptionsMenu();
     });
     aboutButton.addEventListener("click", function() {
         window.location.href = "https://mypersonalmainpage5600.jammoul26.workers.dev/";
@@ -135,6 +137,72 @@ function showMainMenu() {
     startBlock.appendChild(optionsButton);
     startBlock.appendChild(aboutButton);
     startBlock.appendChild(exitButton);
+    startBlock.style.display = "flex";
+}
+function showOptionsMenu() {
+    startBlock.classList.remove("main-menu");
+    startBlock.classList.remove("sound-menu");
+    startBlock.classList.remove("difficulty-menu");
+    startBlock.classList.add("options-menu");
+    startBlock.innerHTML = "";
+    const title = document.createElement("div");
+    title.textContent = "Options";
+    title.className = "menu-title";
+    const musicButton = document.createElement("button");
+    musicButton.className = "menu-button";
+    const soundButton = document.createElement("button");
+    soundButton.className = "menu-button";
+    const languageButton = document.createElement("button");
+    languageButton.textContent = "Language";
+    languageButton.className = "menu-button";
+    const returnButton = document.createElement("button");
+    returnButton.textContent = "Return";
+    returnButton.className = "return-button";
+    function updateMusicButton() {
+        if(musicEnabled) {
+            musicButton.textContent = "Music : On";
+            musicButton.style.backgroundColor = "green";
+        }
+        else {
+            musicButton.textContent = "Music : Off";
+            musicButton.style.backgroundColor = "red";
+        }
+    }
+    function updateSoundButton() {
+        if(soundsEnabled) {
+            soundButton.textContent = "Sound : On";
+            soundButton.style.backgroundColor = "green";
+        }
+        else {
+            soundButton.textContent = "Sound : Off";
+            soundButton.style.backgroundColor = "red";
+        }
+    }
+    musicButton.addEventListener("click", function() {
+        musicEnabled = !musicEnabled;
+        gameMusic.muted = !musicEnabled;
+        firstMusic.muted = !musicEnabled;
+        youWinSound.muted = !musicEnabled;
+        updateMusicButton();
+    });
+    soundButton.addEventListener("click", function() {
+        setSoundsEnabled(!soundsEnabled);
+        updateSoundButton();
+    });
+    languageButton.addEventListener("click", function() {
+        playClickSound();
+    });
+    returnButton.addEventListener("click", function() {
+        playClickSound();
+        showMainMenu();
+    });
+    updateMusicButton();
+    updateSoundButton();
+    startBlock.appendChild(title);
+    startBlock.appendChild(musicButton);
+    startBlock.appendChild(soundButton);
+    startBlock.appendChild(languageButton);
+    startBlock.appendChild(returnButton);
     startBlock.style.display = "flex";
 }
 function drawMoveDot(position) {
@@ -692,7 +760,6 @@ canvas.addEventListener("click", function(event) {
             validMoves = getBishopMoves(selectedPiece , pieces);
         else if(selectedPiece.type === "king")
             validMoves = getKingMoves(selectedPiece , pieces);
-
         validMoves = getLegalMoves(selectedPiece , validMoves);
         const captureMoves = validMoves.filter(move => pieces.some(
             piece => piece.position === move && piece.color !== selectedPiece.color 
@@ -708,3 +775,4 @@ canvas.addEventListener("click", function(event) {
         }
     }
 });
+// const musicEnabled gameMusic.pause()
