@@ -587,10 +587,11 @@ body {
         margin-top: 15px;
     }
     #game-over-message {
-        left: 10px;
-        font-size: 24px;
-        width: 240px;
-        padding: 10px 15px;
+       left: 50% !important;
+       transform: translateX(-50%) !important;
+       font-size: 20px;
+       width: 240px;
+       padding: 10px 15px;
     }
     #check-message {
         left: 50%;
