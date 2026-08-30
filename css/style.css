@@ -635,10 +635,10 @@ body {
         margin-top: 4px;
     }
     #chess-game-title {
-        font-size: 13px;
-        padding: 2px 6px;
-        position: relative;
-        top: 50px;
+        position: fixed;
+        top: 150px !important;
+        left:50% !important;
+        transform: translateX(-50%) !important;
     }
     #start-block {
         width: 90%;
