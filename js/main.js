@@ -262,7 +262,7 @@ function showDifficultyMenu() {
     twoPlayersButton.textContent = "2 Players";
     twoPlayersButton.className = "menu-button";
     const makhloutaButton = document.createElement("button");
-    makhloutaButton.textContent = "Makhlouta AI";
+    makhloutaButton.textContent = "Makhlouta Easy AI";
     makhloutaButton.className = "menu-button";
     const returnButton = document.createElement("button");
     returnButton.textContent = "Return";
@@ -277,10 +277,13 @@ function showDifficultyMenu() {
         startEasyAIGame();
     });
     normalButton.addEventListener("click", function() {
+        startNormalAIGame();
     });
     hardButton.addEventListener("click", function() {
+        startHardAIGame();
     });
     makhloutaButton.addEventListener("click", function() {
+        startMakhloutaEasyAIGame();
     });
     twoPlayersButton.addEventListener("click", function() {
         startTwoPlayersGame();
@@ -350,7 +353,7 @@ function startEasyAIGame() {
 function makeEasyAIMove() {
     if(gameOver)
         return;
-    if(gameMode !== "easyAI")
+    if(gameMode !== "easyAI" && gameMode !== "makhloutaEasyAI")
         return;
     if(currentTurn !== "black")
         return;
@@ -384,17 +387,223 @@ function makeEasyAIMove() {
     const selectedAIMove = allLegalMoves[randomIndex];
     const aiPiece = selectedAIMove.piece;
     const targetPosition = selectedAIMove.move;
-    const capturedPiece = pieces.find(
-        piece =>
-            piece.position === targetPosition &&
-            piece.color !== aiPiece.color
-    );
+    const capturedPiece = pieces.find(piece => piece.position === targetPosition && piece.color !== aiPiece.color);
     playMoveSound();
     if(capturedPiece) {
         const capturedIndex = pieces.indexOf(
             capturedPiece
         );
         pieces.splice(capturedIndex, 1);
+        setTimeout(() => {
+            if(soundsEnabled) {
+                killSound.currentTime = 0;
+                killSound.play();
+            }
+        }, 100);
+    }
+    aiPiece.position = targetPosition;
+    updateCheckStatus();
+    if(checkedKing) {
+        if(soundsEnabled) {
+            checkSound.currentTime = 0;
+            checkSound.play();
+        }
+        if(checkForCheckmate()) {
+            drawBoard();
+            return;
+        }
+    }
+    if(gameMode !== "makhloutaEasyAI" && aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
+    aiPiece.type = "queen";
+    aiPiece.image = "assets/images/black-queen.png";
+    }
+    switchTurn();
+    drawBoard();
+}
+function startHardAIGame() {
+    startScreen.style.display = "none";
+    firstMusic.pause();
+    firstMusic.currentTime = 0;
+    gameMode = "hardAI";
+    startLoading(function() {
+        gameStarted = true;
+        timers.style.display = "flex";
+        whiteTime = 6;
+        blackTime = 0;
+        currentTurn = "white";
+        gameOver = false;
+        hardAIThinking = false;
+        if(aiMoveTimeout) {
+            clearTimeout(aiMoveTimeout);
+            aiMoveTimeout = null;
+        }
+        updateTimers();
+        startTimer();
+        if(soundsEnabled && musicEnabled) {
+            gameMusic.currentTime = 0;
+            gameMusic.play();
+        }
+        drawBoard();
+    });
+}
+function startNormalAIGame() {
+    startScreen.style.display = "none";
+    firstMusic.pause();
+    firstMusic.currentTime = 0;
+    gameMode = "normalAI";
+    startLoading(function() {
+        gameStarted = true;
+        timers.style.display = "flex";
+        whiteTime = 12;
+        blackTime = 0;
+        currentTurn = "white";
+        gameOver = false;
+        if(aiMoveTimeout) {
+            clearTimeout(aiMoveTimeout);
+            aiMoveTimeout = null;
+        }
+        updateTimers();
+        startTimer();
+        if(soundsEnabled && musicEnabled) {
+            gameMusic.currentTime = 0;
+            gameMusic.play();
+        }
+        drawBoard();
+    });
+}
+function startMakhloutaEasyAIGame() {
+    startScreen.style.display = "none";
+    firstMusic.pause();
+    firstMusic.currentTime = 0;
+    gameMode = "makhloutaEasyAI";
+    startLoading(function() {
+        gameStarted = true;
+        timers.style.display = "flex";
+        whiteTime = 24;
+        blackTime = 0;
+        currentTurn = "white";
+        gameOver = false;
+        if(aiMoveTimeout) {
+            clearTimeout(aiMoveTimeout);
+            aiMoveTimeout = null;
+        }
+        createMakhloutaPosition();
+        updateCheckStatus();
+        updateTimers();
+        startTimer();
+        if(soundsEnabled && musicEnabled) {
+            gameMusic.currentTime = 0;
+            gameMusic.play();
+        }
+        drawBoard();
+    });
+}
+function createMakhloutaPosition() {
+    const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const positions = [];
+    for(let row = 1; row <= 8; row++) {
+        for(let file of files) 
+            positions.push(file + row);
+    }
+    let validPositionFound = false;
+    while(!validPositionFound) {
+        for(let i = positions.length - 1; i > 0; i--) {
+            const randomIndex = Math.floor(Math.random() * (i + 1));
+            const temp = positions[i];
+            positions[i] = positions[randomIndex];
+            positions[randomIndex] = temp;
+        }
+        for(let i = 0; i < pieces.length; i++) 
+            pieces[i].position = positions[i];
+        const whiteInCheck = isKingInCheck("white", pieces);
+        const blackInCheck = isKingInCheck("black",pieces);
+        if(!whiteInCheck && !blackInCheck) 
+            validPositionFound = true;
+    }
+    checkedKing = null;
+}
+function makeNormalAIMove() {
+    if(gameOver)
+        return;
+    if(gameMode !== "normalAI")
+        return;
+    if(currentTurn !== "black")
+        return;
+    const blackPieces = pieces.filter(piece => piece.color === "black");
+    let allLegalMoves = [];
+    for(let piece of blackPieces) {
+        const moves = getPieceMoves(piece);
+        const legalMoves = getLegalMoves(piece,moves);
+        for(let move of legalMoves) {
+            allLegalMoves.push({ piece: piece, move: move });
+        }
+    }
+    if(allLegalMoves.length === 0) {
+        updateCheckStatus();
+        if(checkedKing === "black") 
+            endGame("black");
+        return;
+    }
+    let scoredMoves = [];
+    for(let possibleMove of allLegalMoves) {
+        const piece = possibleMove.piece;
+        const targetPosition = possibleMove.move;
+        let score = 1;
+        const capturedPiece = pieces.find(
+            otherPiece =>
+                otherPiece.position === targetPosition &&
+                otherPiece.color !== piece.color
+        );
+        if(capturedPiece) {
+            if(capturedPiece.type === "queen")
+                score += 35;
+            else if(capturedPiece.type === "rook")
+                score += 25;
+            else if(capturedPiece.type === "bishop")
+                score += 18;
+            else if(capturedPiece.type === "knight")
+                score += 18;
+            else if(capturedPiece.type === "pawn")
+                score += 10;
+            else
+                score += 50;
+        }
+        const originalPosition = piece.position;
+        let capturedIndex = -1;
+        if(capturedPiece) {
+            capturedIndex = pieces.indexOf(capturedPiece);
+            pieces.splice(capturedIndex, 1);
+        }
+        piece.position = targetPosition;
+        const givesCheck = isKingInCheck("white", pieces);
+        piece.position = originalPosition;
+        if(capturedPiece) 
+            pieces.splice(capturedIndex, 0, capturedPiece);
+        if(givesCheck) 
+            score += 30;
+        if(piece.type === "knight" ||
+           piece.type === "bishop") {
+            score += 3;
+        }
+        score += Math.random() * 12;
+        scoredMoves.push({piece: piece, move: targetPosition, score: score});
+    }
+    scoredMoves.sort((a, b) => b.score - a.score);
+    let candidateMoves;
+    if(scoredMoves.length <= 3) 
+        candidateMoves = scoredMoves;
+    else 
+        candidateMoves = scoredMoves.slice(0 , Math.min(6, scoredMoves.length));
+    const randomIndex = Math.floor(Math.random() * candidateMoves.length);
+    const selectedAIMove = candidateMoves[randomIndex];
+    const aiPiece = selectedAIMove.piece;
+    const targetPosition = selectedAIMove.move;
+    const capturedPiece = pieces.find(
+        piece => piece.position === targetPosition && piece.color !== aiPiece.color);
+    playMoveSound();
+    if(capturedPiece) {
+        const capturedIndex = pieces.indexOf(capturedPiece);
+        pieces.splice(capturedIndex , 1);
         setTimeout(() => {
             if(soundsEnabled) {
                 killSound.currentTime = 0;
@@ -447,6 +656,7 @@ let timerInterval = null;
 let gameMode = "2players";
 let aiMoveTimeout = null;
 let gameOver = false;
+let hardAIThinking = false;
 drawBoard();
 function updateTimers() {
  whiteTimer.textContent = "00:" + String(whiteTime).padStart(2, "0"); 
@@ -461,39 +671,69 @@ function startTimer() {
                 updateTimers();
             }
             if(whiteTime === 0) {
+                updateCheckStatus();
+        if(checkedKing === "white") {
+                    endGame("white");
+                    return;
+                }
                 switchTurn();
             }
         }
         else if(currentTurn === "black") {
-          if(blackTime > 0){
-          blackTime--;
-          updateTimers();
-          }
-          if(blackTime === 0) {
-            switchTurn();
-          }
+            if(blackTime > 0) {
+                blackTime--;
+                updateTimers();
+            }
+            if(blackTime === 0) {
+                updateCheckStatus();
+                if(checkedKing === "black") {
+                    endGame("black");
+                    return;
+                }
+                switchTurn();
+            }
         }
-    } , 1000);
+    }, 1000);
 }
 function switchTurn() {
     selectedPiece = null;
     validMoves = [];
     if(currentTurn === "white") {
         whiteTime = 0;
-        blackTime = 24;
+        if(gameMode === "easyAI" || gameMode === "makhloutaEasyAI") 
+            blackTime = 24;
+        else if(gameMode === "normalAI") 
+            blackTime = 12;
+        else if(gameMode === "hardAI") 
+            blackTime = 6;
+        else 
+            blackTime = 24;
         currentTurn = "black";
         updateTimers();
         drawBoard();
-        if(gameMode === "easyAI") {
+        if(gameMode === "easyAI" || gameMode === "makhloutaEasyAI") {
             const randomDelay = Math.floor(Math.random() * 5000) + 1000;
-            aiMoveTimeout = setTimeout(() => {
-                makeEasyAIMove();
-            }, randomDelay);
+            aiMoveTimeout = setTimeout(() => { makeEasyAIMove(); }, randomDelay);
+        }
+        else if(gameMode === "normalAI") {
+            const randomDelay = Math.floor(Math.random() * 4000) + 1000;
+            aiMoveTimeout = setTimeout(() => { makeNormalAIMove(); }, randomDelay);
+        }
+        else if(gameMode === "hardAI") {
+            const randomDelay = Math.floor(Math.random() * 1500) + 500;
+            aiMoveTimeout = setTimeout(() => { makeHardAIMove(); }, randomDelay);
         }
     }
     else {
         blackTime = 0;
-        whiteTime = 24;
+        if(gameMode === "easyAI" || gameMode === "makhloutaAI") 
+            whiteTime = 24;
+        else if(gameMode === "normalAI") 
+            whiteTime = 12;
+        else if(gameMode === "hardAI") 
+            whiteTime = 6;
+        else 
+            whiteTime = 24;
         currentTurn = "white";
         updateTimers();
         drawBoard();
@@ -758,16 +998,32 @@ function endGame(losingColor) {
     selectedPiece = null;
     validMoves = [];
     checkMessage.style.display = "none";
-    if(gameMode === "easyAI") {
-    if(losingColor === "white") {
+   if(gameMode === "easyAI") {
+    if(losingColor === "white") 
         gameOverMessage.textContent = "Easy Ai Win";
-    }
-    else {
+    else 
         gameOverMessage.textContent = "Player Win";
-    }
+}
+else if(gameMode === "normalAI") {
+    if(losingColor === "white")
+        gameOverMessage.textContent = "Normal AI Win";
+    else 
+        gameOverMessage.textContent = "Player Win";
+}
+else if(gameMode === "hardAI") {
+    if(losingColor === "white") 
+        gameOverMessage.textContent = "Hard AI Win";
+    else 
+        gameOverMessage.textContent = "Player Win";
+}
+else if(gameMode === "makhloutaEasyAI") {
+    if(losingColor === "white") 
+        gameOverMessage.textContent === "Makhlouta Easy AI Win";
+    else
+        gameOverMessage.textContent === "Player Win";
 }
 else {
-    if(losingColor === "white") 
+    if(losingColor === "white")
         gameOverMessage.textContent = "Player 02 Win";
     else
         gameOverMessage.textContent = "Player 01 Win";
@@ -792,6 +1048,187 @@ function getPieceMoves(piece) {
     else
         return getKingMoves(piece , pieces)
     return [];
+}
+function getPieceValue(piece) {
+    if(piece.type === "pawn")
+        return 100;
+    if(piece.type === "knight")
+        return 320;
+    if(piece.type === "bishop")
+        return 330;
+    if(piece.type === "rook")
+        return 500;
+    if(piece.type === "queen")
+        return 900;
+    if(piece.type === "king")
+        return 20000;
+    return 0;
+}
+function evaluateBoard() {
+    let score = 0;
+    for(let piece of pieces) {
+        const value = getPieceValue(piece);
+        if(piece.color === "black")
+            score += value;
+        else
+            score -= value;
+    }
+    return score;
+}
+function evaluateKingSafety() {
+    let score = 0;
+    if(isKingInCheck("black", pieces)) 
+        score -= 500;
+    if(isKingInCheck("white", pieces)) 
+        score += 500;
+    return score;
+}
+function evaluatePosition() {
+    let score = evaluateBoard();
+    score += evaluateKingSafety();
+    return score;
+}
+function minimax(depth, alpha, beta, maximizingPlayer) {
+    updateCheckStatus();
+    if(depth === 0) 
+        return evaluatePosition();
+    if(checkedKing) {
+        const kingColor = checkedKing;
+        if(!hasAnyLegalMove(kingColor)) {
+            if(kingColor === "black")
+                return -1000000 - depth;
+            if(kingColor === "white") 
+                return 1000000 + depth;
+        }
+    }
+    if(maximizingPlayer) {
+        let maxEvaluation = -Infinity;
+        const blackPieces = pieces.filter(piece => piece.color === "black");
+        for(let piece of blackPieces) {
+            const moves = getPieceMoves(piece);
+            const legalMoves = getLegalMoves(piece, moves);
+            for(let move of legalMoves) {
+                const originalPosition = piece.position;
+                const capturedPiece = pieces.find(otherPiece => otherPiece.position === move && otherPiece.color !== piece.color);
+                const capturedIndex = capturedPiece? pieces.indexOf(capturedPiece): -1;
+                if(capturedPiece) 
+                    pieces.splice(capturedIndex, 1);
+                piece.position = move;
+                let evaluation = minimax(depth - 1, alpha, beta, false);
+                piece.position = originalPosition;
+                if(capturedPiece) 
+                    pieces.splice(capturedIndex, 0, capturedPiece);
+                maxEvaluation = Math.max(maxEvaluation, evaluation);
+                alpha = Math.max(alpha, evaluation);
+                if(beta <= alpha) 
+                    return maxEvaluation;
+            }
+        }
+        return maxEvaluation;
+    }
+    else {
+        let minEvaluation = Infinity;
+        const whitePieces = pieces.filter(piece => piece.color === "white");
+        for(let piece of whitePieces) {
+            const moves = getPieceMoves(piece);
+            const legalMoves = getLegalMoves(piece, moves);
+            for(let move of legalMoves) {
+                const originalPosition = piece.position;
+                const capturedPiece = pieces.find(otherPiece => otherPiece.position === move && otherPiece.color !== piece.color);
+                const capturedIndex = capturedPiece ? pieces.indexOf(capturedPiece) : -1;
+                if(capturedPiece) 
+                    pieces.splice(capturedIndex, 1);
+                piece.position = move;
+                let evaluation = minimax(depth - 1, alpha, beta, true);
+                piece.position = originalPosition;
+                if(capturedPiece) 
+                    pieces.splice(capturedIndex, 0, capturedPiece);
+                minEvaluation = Math.min(minEvaluation, evaluation);
+                beta = Math.min(beta, evaluation);
+                if(beta <= alpha) 
+                    return minEvaluation;
+            }
+        }
+        return minEvaluation;
+    }
+}
+function getHardAIMove() {
+    const blackPieces = pieces.filter(piece => piece.color === "black");
+    let bestMove = null;
+    let bestEvaluation = -Infinity;
+    const searchDepth = 3;
+    for(let piece of blackPieces) {
+        const moves = getPieceMoves(piece);
+        const legalMoves = getLegalMoves(piece, moves);
+        for(let move of legalMoves) {
+            const originalPosition = piece.position;
+            const capturedPiece = pieces.find(otherPiece => otherPiece.position === move && otherPiece.color !== piece.color);
+            const capturedIndex = capturedPiece? pieces.indexOf(capturedPiece): -1;
+            if(capturedPiece) 
+                pieces.splice(capturedIndex, 1);
+            piece.position = move;
+            const evaluation = minimax(searchDepth - 1, -Infinity, Infinity, false);
+            piece.position = originalPosition;
+            if(capturedPiece) 
+                pieces.splice(capturedIndex, 0, capturedPiece);
+            if(evaluation > bestEvaluation || bestMove === null) {
+                bestEvaluation = evaluation;
+                bestMove = { piece: piece, move: move };
+            }
+        }
+    }
+    return bestMove;
+}
+function makeHardAIMove() {
+    if(gameOver)
+        return;
+    if(gameMode !== "hardAI")
+        return;
+    if(currentTurn !== "black")
+        return;
+    hardAIThinking = true;
+    const selectedMove = getHardAIMove();
+    if(!selectedMove) {
+        updateCheckStatus();
+        if(checkedKing === "black") 
+            endGame("black");
+        hardAIThinking = false;
+        return;
+    }
+    const aiPiece = selectedMove.piece;
+    const targetPosition = selectedMove.move;
+    const capturedPiece = pieces.find(piece => piece.position === targetPosition && piece.color !== aiPiece.color);
+    playMoveSound();
+    if(capturedPiece) {
+        const capturedIndex = pieces.indexOf(capturedPiece);
+        pieces.splice(capturedIndex, 1);
+        setTimeout(() => {
+            if(soundsEnabled) {
+                killSound.currentTime = 0;
+                killSound.play();
+            }
+        }, 100);
+    }
+    aiPiece.position = targetPosition;
+    if(aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
+        aiPiece.type = "queen";
+        aiPiece.image = "assets/images/black-queen.png";
+    }
+    updateCheckStatus();
+    if(checkedKing) {
+        if(soundsEnabled) {
+            checkSound.currentTime = 0;
+            checkSound.play();
+        }
+        if(checkForCheckmate()) {
+            hardAIThinking = false;
+            drawBoard();
+            return;
+        }
+    }
+    hardAIThinking = false;
+    switchTurn();
+    drawBoard();
 }
 canvas.addEventListener("click", function(event) {
     if(!gameStarted)
@@ -839,25 +1276,20 @@ canvas.addEventListener("click", function(event) {
     }
         console.log("White in check: " , isKingInCheck("white", pieces));
         console.log("Black in check: " , isKingInCheck("black" , pieces));
-        if(selectedPiece.type === "pawn" && (
-        (selectedPiece.color === "white" && selectedPiece.position[1] === "8") || (selectedPiece.color === "black" && selectedPiece.position[1] === "1")
-       )) {
-        promotionPiece = selectedPiece ;
-        promotionMenu.style.display = "block";
-       }
-       else {
-            switchTurn(); 
-       }
+        if(gameMode !== "makhloutaEasyAI" && selectedPiece.type === "pawn" && ((selectedPiece.color === "white" && selectedPiece.position[1] === "8") || (selectedPiece.color === "black" && selectedPiece.position[1] === "1"))) {
+          promotionPiece = selectedPiece;
+          promotionMenu.style.display = "block";
+         }
+  else 
+    switchTurn();
        selectedPiece = null;
        validMoves = [];
        drawBoard();
         return;
     }
     console.log("Position:", position);
-    selectedPiece = pieces.find(
-        piece => piece.position === position
-    );
-    if(gameMode === "easyAI" && currentTurn === "black") {
+    selectedPiece = pieces.find(piece => piece.position === position);
+   if((gameMode === "easyAI" || gameMode === "normalAI" || gameMode === "hardAI") && currentTurn === "black") {
     selectedPiece = null;
     validMoves = [];
     return;
@@ -914,4 +1346,4 @@ canvas.addEventListener("click", function(event) {
         }
     }
 });
-// const musicEnabled gameMusic.pause() switchTurn() endGame()
+// const musicEnabled gameMusic.pause() switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove()
