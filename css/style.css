@@ -623,6 +623,8 @@ body {
         width: 100%;
         padding: 0 10px;
         box-sizing: border-box;
+        position: relative;
+        top: -10px;
     }
     #version-text {
         font-size: 14px;
