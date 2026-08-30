@@ -632,11 +632,11 @@ body {
     visibility: visible !important;
     opacity: 1 !important;
     left: 10px !important;
-    bottom: 100px !important;
+    bottom: 130px !important;
     top: auto !important;
     right: auto !important;
     color: white !important;
-    font-size: 25px !important;
+    font-size: 15px !important;
     z-index: 99999 !important;
 }
     #creator-text {
