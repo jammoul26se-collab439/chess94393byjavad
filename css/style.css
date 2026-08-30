@@ -637,6 +637,7 @@ body {
     #chess-game-title {
         font-size: 13px;
         padding: 2px 6px;
+        transform: translateY(5px)
     }
     #start-block {
         width: 90%;
