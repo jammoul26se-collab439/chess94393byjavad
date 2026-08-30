@@ -13,6 +13,8 @@ const blackTimer = document.getElementById("black-timer");
 const gameMusic = new Audio("assets/sounds/MusicPlay.mp4");
 gameMusic.loop = true;
 gameMusic.volume = 0.8;
+const youLoseSound = new Audio("assets/sounds/youLoseSoundTrick.mp4");
+youLoseSound.volume = 1;
 const checkMessage = document.getElementById("check-message");
 const gameOverMessage = document.getElementById("game-over-message");
 let loadingDots = 1;
@@ -301,11 +303,11 @@ function showDifficultyMenu() {
     startBlock.style.display = "flex";
 }
 function startTwoPlayersGame() {
-    startScreen.style.display = "none";
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "2players";
     startLoading(function() {
+        startScreen.style.display = "none";
         gameStarted = true;
         timers.style.display = "flex";
         whiteTime = 24;
@@ -316,8 +318,7 @@ function startTwoPlayersGame() {
             clearTimeout(aiMoveTimeout);
             aiMoveTimeout = null;
         }
-        updateTimers();
-        startTimer();
+        setupGameInterface();
         if(soundsEnabled && musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
@@ -326,13 +327,12 @@ function startTwoPlayersGame() {
     });
 }
 function startEasyAIGame() {
-    startScreen.style.display = "none";
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "easyAI";
     startLoading(function() {
+        startScreen.style.display = "none";
         gameStarted = true;
-        timers.style.display = "flex";
         whiteTime = 24;
         blackTime = 0;
         currentTurn = "white";
@@ -341,8 +341,7 @@ function startEasyAIGame() {
             clearTimeout(aiMoveTimeout);
             aiMoveTimeout = null;
         }
-        updateTimers();
-        startTimer();
+        setupGameInterface();
         if(soundsEnabled && musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
@@ -421,13 +420,12 @@ function makeEasyAIMove() {
     drawBoard();
 }
 function startHardAIGame() {
-    startScreen.style.display = "none";
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "hardAI";
     startLoading(function() {
+        startScreen.style.display = "none";
         gameStarted = true;
-        timers.style.display = "flex";
         whiteTime = 6;
         blackTime = 0;
         currentTurn = "white";
@@ -437,8 +435,7 @@ function startHardAIGame() {
             clearTimeout(aiMoveTimeout);
             aiMoveTimeout = null;
         }
-        updateTimers();
-        startTimer();
+        setupGameInterface();
         if(soundsEnabled && musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
@@ -447,13 +444,12 @@ function startHardAIGame() {
     });
 }
 function startNormalAIGame() {
-    startScreen.style.display = "none";
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "normalAI";
     startLoading(function() {
+        startScreen.style.display = "none";
         gameStarted = true;
-        timers.style.display = "flex";
         whiteTime = 12;
         blackTime = 0;
         currentTurn = "white";
@@ -462,8 +458,7 @@ function startNormalAIGame() {
             clearTimeout(aiMoveTimeout);
             aiMoveTimeout = null;
         }
-        updateTimers();
-        startTimer();
+        setupGameInterface();
         if(soundsEnabled && musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
@@ -472,13 +467,12 @@ function startNormalAIGame() {
     });
 }
 function startMakhloutaEasyAIGame() {
-    startScreen.style.display = "none";
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "makhloutaEasyAI";
     startLoading(function() {
+        startScreen.style.display = "none";
         gameStarted = true;
-        timers.style.display = "flex";
         whiteTime = 24;
         blackTime = 0;
         currentTurn = "white";
@@ -489,8 +483,7 @@ function startMakhloutaEasyAIGame() {
         }
         createMakhloutaPosition();
         updateCheckStatus();
-        updateTimers();
-        startTimer();
+        setupGameInterface();
         if(soundsEnabled && musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
@@ -662,6 +655,51 @@ function updateTimers() {
  whiteTimer.textContent = "00:" + String(whiteTime).padStart(2, "0"); 
  blackTimer.textContent = "00:" + String(blackTime).padStart(2, "0");
 }
+function updateGameModeDisplay() {
+    let aiName;
+    if(gameMode === "easyAI")
+        aiName = "Easy AI";
+    else if(gameMode === "normalAI")
+        aiName = "Normal AI";
+    else if(gameMode === "hardAI")
+        aiName = "Hard AI";
+    else if(gameMode === "makhloutaEasyAI")
+        aiName = "Makhlouta Easy AI";
+    else
+        aiName = "Player 2";
+    let leftLabel = document.getElementById("left-player-label");
+    let rightLabel = document.getElementById("right-player-label");
+    if(!leftLabel) {
+        leftLabel = document.createElement("div");
+        leftLabel.id = "left-player-label";
+        timers.appendChild(leftLabel);
+    }
+    if(!rightLabel) {
+        rightLabel = document.createElement("div");
+        rightLabel.id = "right-player-label";
+        timers.appendChild(rightLabel);
+    }
+    if(gameMode === "2players") {
+        leftLabel.textContent = currentTurn === "black" ? "Player 2 Turn" : "Player 2";
+        rightLabel.textContent = currentTurn === "white" ? "Player 1 Turn" : "Player 1";
+    }
+    else {
+        leftLabel.textContent = currentTurn === "black" ? aiName + " Turn" : aiName;
+        rightLabel.textContent = currentTurn === "white" ? "Player Turn" : "Player";
+    }
+    if(currentTurn === "black") {
+        leftLabel.classList.add("active-player");
+        leftLabel.classList.remove("inactive-player");
+        rightLabel.classList.add("inactive-player");
+        rightLabel.classList.remove("active-player");
+    }
+    else {
+        leftLabel.classList.add("inactive-player");
+        leftLabel.classList.remove("active-player");
+        rightLabel.classList.add("active-player");
+        rightLabel.classList.remove("inactive-player");
+    }
+}
 function startTimer() {
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -709,6 +747,7 @@ function switchTurn() {
         else 
             blackTime = 24;
         currentTurn = "black";
+        updateTurnDisplay();
         updateTimers();
         drawBoard();
         if(gameMode === "easyAI" || gameMode === "makhloutaEasyAI") {
@@ -726,7 +765,7 @@ function switchTurn() {
     }
     else {
         blackTime = 0;
-        if(gameMode === "easyAI" || gameMode === "makhloutaAI") 
+        if(gameMode === "easyAI" || gameMode === "makhloutaEasyAI") 
             whiteTime = 24;
         else if(gameMode === "normalAI") 
             whiteTime = 12;
@@ -735,8 +774,72 @@ function switchTurn() {
         else 
             whiteTime = 24;
         currentTurn = "white";
+        updateTurnDisplay();
         updateTimers();
         drawBoard();
+    }
+}
+function updateTurnDisplay() {
+    const leftLabel = document.getElementById("left-player-label");
+    const rightLabel = document.getElementById("right-player-label");
+    if(!leftLabel || !rightLabel)
+        return;
+    let aiName;
+    if(gameMode === "easyAI")
+        aiName = "Easy AI";
+    else if(gameMode === "normalAI")
+        aiName = "Normal AI";
+    else if(gameMode === "hardAI")
+        aiName = "Hard AI";
+    else if(gameMode === "makhloutaEasyAI")
+        aiName = "Makhlouta Easy AI";
+    else
+        aiName = "Player 2";
+    if(gameMode === "2players") {
+        leftLabel.textContent = currentTurn === "black" ? "Player 2 Turn" : "Player 2";
+        rightLabel.textContent = currentTurn === "white" ? "Player 1 Turn" : "Player 1";
+    }
+    else {
+        leftLabel.textContent = currentTurn === "black" ? aiName + " Turn" : aiName;
+        rightLabel.textContent = currentTurn === "white" ? "Player Turn" : "Player";
+    }
+    if(currentTurn === "black") {
+        leftLabel.classList.add("active-player");
+        leftLabel.classList.remove("inactive-player");
+        rightLabel.classList.add("inactive-player");
+        rightLabel.classList.remove("active-player");
+    }
+    else {
+        leftLabel.classList.add("inactive-player");
+        leftLabel.classList.remove("active-player");
+        rightLabel.classList.add("active-player");
+        rightLabel.classList.remove("inactive-player");
+    }
+}
+function updateGameFooter() {
+    let footer = document.getElementById("game-footer");
+    if(!footer) {
+        footer = document.createElement("div");
+        footer.id = "game-footer";
+        const leftSide = document.createElement("div");
+        leftSide.id = "footer-left";
+        const versionText = document.createElement("div");
+        versionText.id = "version-text";
+        versionText.textContent = "Version 1.46";
+        leftSide.appendChild(versionText);
+        const rightSide = document.createElement("div");
+        rightSide.id = "footer-right";
+        const creatorText = document.createElement("div");
+        creatorText.id = "creator-text";
+        creatorText.textContent = "By Jawad Jammoul";
+        const copyrightText = document.createElement("div");
+        copyrightText.id = "copyright-text";
+        copyrightText.textContent = "© All Copyright Reserved";
+        rightSide.appendChild(creatorText);
+        rightSide.appendChild(copyrightText);
+        footer.appendChild(leftSide);
+        footer.appendChild(rightSide);
+        canvas.parentNode.insertBefore(footer, canvas.nextSibling);
     }
 }
 function updateCheckStatus() {
@@ -1018,9 +1121,9 @@ else if(gameMode === "hardAI") {
 }
 else if(gameMode === "makhloutaEasyAI") {
     if(losingColor === "white") 
-        gameOverMessage.textContent === "Makhlouta Easy AI Win";
+        gameOverMessage.textContent = "Makhlouta Easy AI Win";
     else
-        gameOverMessage.textContent === "Player Win";
+        gameOverMessage.textContent = "Player Win";
 }
 else {
     if(losingColor === "white")
@@ -1029,10 +1132,16 @@ else {
         gameOverMessage.textContent = "Player 01 Win";
 }
     gameOverMessage.style.display = "block";
-    if(soundsEnabled && musicEnabled) {
+  if(soundsEnabled && musicEnabled) {
+    if(losingColor === "white" && gameMode !== "2players") {
+        youLoseSound.currentTime = 0;
+        youLoseSound.play();
+    }
+    else {
         youWinSound.currentTime = 0;
         youWinSound.play();
     }
+  }
 }
 function getPieceMoves(piece) {
     if(piece.type === "pawn")
@@ -1151,6 +1260,14 @@ function minimax(depth, alpha, beta, maximizingPlayer) {
         }
         return minEvaluation;
     }
+}
+function setupGameInterface() {
+    timers.style.display = "flex";
+    updateTimers();
+    updateGameModeDisplay();
+    updateTurnDisplay();
+    updateGameFooter();
+    startTimer();
 }
 function getHardAIMove() {
     const blackPieces = pieces.filter(piece => piece.color === "black");
@@ -1346,4 +1463,5 @@ canvas.addEventListener("click", function(event) {
         }
     }
 });
-// const musicEnabled gameMusic.pause() switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove()
+
+// const musicEnabled gameMusic.pause() switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()

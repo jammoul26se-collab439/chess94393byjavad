@@ -1,17 +1,23 @@
 #game-over-message {
     display: none;
+    position: fixed;
+    top: 75px;
+    left: 40%;
+    transform: translateY(-50%);
     background-color: green;
     color: white;
     font-size: 30px;
     font-weight: bold;
     text-align: center;
     padding: 10px 20px;
-    margin-top: 20px;
+    margin:0;
     width: 300px;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 #check-message {
     display: none;
-    position : fixed;
+    position: fixed;
     top: 50%;
     left: calc(50% + 250px);
     transform: translateY(-50%);
@@ -30,6 +36,7 @@
     left: 0;
     width: 100%;
     justify-content: space-between;
+    align-items: flex-start;
     padding: 0 25px;
     box-sizing: border-box;
     z-index: 500;
@@ -42,6 +49,7 @@
     background: black;
     padding: 5px 12px;
     border-radius: 5px;
+    margin-top: 45px;
 }
 #start-screen {
     position: fixed;
@@ -96,16 +104,16 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50% , -50%);
+    transform: translate(-50%, -50%);
     background-color: yellowgreen;
-    color:white;
+    color: white;
     padding: 25px;
     border-radius: 10px;
     text-align: center;
     z-index: 1000;
 }
 #promotion-menu p {
-    font-size:20px;
+    font-size: 20px;
     white-space: nowrap;
     font-weight: bold;
 }
@@ -247,7 +255,7 @@ body {
     background-color: red;
 }
 #start-block.sound-menu .menu-title {
-    background-color : transparent;
+    background-color: transparent;
     color: white;
 }
 #start-block.difficulty-menu {
@@ -305,7 +313,7 @@ body {
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.15s ease,  background-color 0.15s ease;
+    transition: transform 0.15s ease, background-color 0.15s ease;
 }
 #start-block.difficulty-menu .return-button:hover {
     background-color: #777777;
@@ -370,6 +378,192 @@ body {
     background-color: #5C3A21;
     color: orange;
 }
+#left-player-label, #right-player-label {
+    position: fixed;
+    top: 5px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    padding: 7px 15px;
+    border-radius: 6px;
+    z-index: 501;
+    transition: background-color 0.2s ease;
+}
+#left-player-label {
+    left: 25px;
+}
+#right-player-label {
+    right: 25px;
+}
+#left-player-label.active-player, #right-player-label.active-player {
+    background-color: green;
+}
+#left-player-label.inactive-player, #right-player-label.inactive-player {
+    background-color: purple;
+}
+#game-footer {
+    width: 100vw;
+    margin-left: calc((100%-100vw)/2);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 120px;
+    box-sizing: border-box;
+    color: white;
+    position: relative;
+    top:-10px;
+}
+#footer-left {
+    text-align: left;
+    margin-left: -200px;
+    position: relative;
+}
+#footer-right {
+    text-align: right;
+}
+#version-text {
+    font-size: 17px;
+    font-weight: bold;
+}
+#creator-text {
+    font-size: 21px;
+    font-weight: bold;
+}
+#copyright-text {
+    font-size: 17px;
+    margin-top: 5px;
+    font-weight: normal;
+}
+#chess-game-title {
+    display: inline-block;
+    background-color: #102a43;
+    color: white;
+    padding: 6px 18px;
+    border-radius: 6px;
+    font-size: 24px;
+    font-weight: bold;
+}
+@media (min-width: 601px) and (max-width: 900px) {
+    #game-over-message {
+        left: 18px;
+        font-size: 26px;
+        width: 270px;
+        padding: 10px 18px;
+    }
+    #check-message {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        padding: 13px 20px;
+    }
+    #timers {
+        top: 10px;
+        padding: 0 18px;
+    }
+    #white-timer, #black-timer {
+        font-size: 25px;
+        padding: 5px 10px;
+        margin-top: 43px;
+    }
+    #left-player-label, #right-player-label {
+        top: 5px;
+        font-size: 21px;
+        padding: 6px 12px;
+    }
+    #left-player-label {
+        left: 18px;
+    }
+    #right-player-label {
+        right: 18px;
+    }
+    #game-footer {
+        width: 95%;
+    }
+    #version-text {
+        font-size: 16px;
+    }
+    #creator-text {
+        font-size: 19px;
+    }
+    #copyright-text {
+        font-size: 16px;
+    }
+    #chess-game-title {
+        font-size: 22px;
+        padding: 5px 15px;
+    }
+    .menu-title {
+        font-size: 30px;
+        margin-top: 40px;
+        margin-bottom: 25px;
+    }
+    .menu-button {
+        width: 220px;
+        font-size: 20px;
+    }
+    .return-button {
+        width: 170px;
+        font-size: 19px;
+    }
+    #start-block {
+        width: 75%;
+        height: 500px;
+    }
+    #start-button {
+        margin-top: 45px;
+        padding: 11px 30px;
+        font-size: 21px;
+    }
+    #loading-text {
+        font-size: 30px;
+    }
+    #chess-board {
+        max-width: 90vw;
+        max-height: 90vw;
+        width: 90vw;
+        height: 90vw;
+        margin: 18px auto;
+    }
+    .chess-container {
+        width: 95%;
+    }
+    #promotion-menu {
+        width: 70%;
+        padding: 22px;
+    }
+    #promotion-menu p {
+        font-size: 19px;
+    }
+    #promotion-menu button {
+        margin: 5px;
+        padding: 8px 13px;
+    }
+    #start-block.sound-menu {
+        width: 300px;
+        height: 210px;
+    }
+    #start-block.sound-menu .menu-title {
+        font-size: 28px;
+    }
+    #start-block.sound-menu .menu-button {
+        width: 65px;
+        padding: 6px 8px;
+        font-size: 16px;
+    }
+    #start-block.main-menu {
+        width: 400px;
+        height: 380px;
+    }
+    #start-block.main-menu .menu-title {
+        font-size: 26px;
+    }
+    #start-block.main-menu .menu-button {
+        width: 135px;
+        padding: 6px 8px;
+        font-size: 16px;
+    }
+}
 @media (max-width: 600px) {
     .menu-title {
         font-size: 25px;
@@ -393,6 +587,7 @@ body {
         margin-top: 15px;
     }
     #game-over-message {
+        left: 10px;
         font-size: 24px;
         width: 240px;
         padding: 10px 15px;
@@ -408,10 +603,40 @@ body {
         top: 8px;
         padding: 0 10px;
     }
-    #white-timer,
-    #black-timer {
+    #white-timer, #black-timer {
         font-size: 22px;
         padding: 4px 8px;
+        margin-top: 38px;
+    }
+    #left-player-label, #right-player-label {
+        top: 5px;
+        font-size: 17px;
+        padding: 5px 9px;
+    }
+    #left-player-label {
+        left: 10px;
+    }
+    #right-player-label {
+        right: 10px;
+    }
+    #game-footer {
+        width: 100%;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+    #version-text {
+        font-size: 14px;
+    }
+    #creator-text {
+        font-size: 17px;
+    }
+    #copyright-text {
+        font-size: 14px;
+        margin-top: 4px;
+    }
+    #chess-game-title {
+        font-size: 20px;
+        padding: 5px 13px;
     }
     #start-block {
         width: 90%;
@@ -520,98 +745,5 @@ body {
     }
     .chess-container {
         width: 100%;
-    }
-}
-@media (min-width: 601px) and (max-width: 900px) {
-    .menu-title {
-    font-size: 30px;
-    margin-top: 40px;
-    margin-bottom: 25px;
-}
-.menu-button {
-    width: 220px;
-    font-size: 20px;
-}
-.return-button {
-    width: 170px;
-    font-size: 19px;
-}
-    #game-over-message {
-        font-size: 26px;
-        width: 270px;
-        padding: 10px 18px;
-    }
-    #check-message {
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 24px;
-        padding: 13px 20px;
-    }
-    #timers {
-        top: 10px;
-        padding: 0 18px;
-    }
-    #white-timer,
-    #black-timer {
-        font-size: 25px;
-        padding: 5px 10px;
-    }
-    #start-block {
-        width: 75%;
-        height: 500px;
-    }
-    #start-button {
-        margin-top: 45px;
-        padding: 11px 30px;
-        font-size: 21px;
-    }
-    #loading-text {
-        font-size: 30px;
-    }
-    #chess-board {
-        max-width: 90vw;
-        max-height: 90vw;
-        width: 90vw;
-        height: 90vw;
-        margin: 18px auto;
-    }
-    .chess-container {
-        width: 95%;
-    }
-    #promotion-menu {
-        width: 70%;
-        padding: 22px;
-    }
-    #promotion-menu p {
-        font-size: 19px;
-    }
-    #promotion-menu button {
-        margin: 5px;
-        padding: 8px 13px;
-    }
-    #start-block.sound-menu {
-        width: 300px;
-        height: 210px;
-    }
-    #start-block.sound-menu .menu-title {
-        font-size: 28px;
-    }
-    #start-block.sound-menu .menu-button {
-        width: 65px;
-        padding: 6px 8px;
-        font-size: 16px;
-    }
-    #start-block.main-menu {
-        width: 400px;
-        height: 380px;
-    }
-    #start-block.main-menu .menu-title {
-        font-size: 26px;
-    }
-    #start-block.main-menu .menu-button {
-        width: 135px;
-        padding: 6px 8px;
-        font-size: 16px;
     }
 }
