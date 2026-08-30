@@ -590,6 +590,7 @@ body {
        left: 50% !important;
        transform: translateX(-50%) !important;
        background-color: orange;
+       top: 55% !important;
        font-size: 15px;
        width: 240px;
        padding: 10px 15px;
