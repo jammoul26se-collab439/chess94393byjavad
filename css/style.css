@@ -627,7 +627,12 @@ body {
         top: -10px;
     }
     #version-text {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
         font-size: 14px;
+        color: white;
+        font-weight: bold;
     }
     #creator-text {
         font-size: 17px;
