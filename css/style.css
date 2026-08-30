@@ -589,7 +589,8 @@ body {
     #game-over-message {
        left: 50% !important;
        transform: translateX(-50%) !important;
-       font-size: 20px;
+       background-color: orange;
+       font-size: 15px;
        width: 240px;
        padding: 10px 15px;
     }
