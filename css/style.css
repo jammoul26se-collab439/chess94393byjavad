@@ -632,10 +632,10 @@ body {
     visibility: visible !important;
     opacity: 1 !important;
     left: 10px !important;
-    bottom: 55px !important;
+    bottom: 75px !important;
     top: auto !important;
     right: auto !important;
-    color: red !important;
+    color: white !important;
     font-size: 25px !important;
     z-index: 99999 !important;
 }
