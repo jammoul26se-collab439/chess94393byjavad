@@ -898,4 +898,20 @@ body {
     .chess-container {
         width: 100%;
     }
+   #game-options-button, #game-main-menu-button {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 85px !important;
+    width: 100px !important;
+    margin: 0 !important;
+    z-index: 99999 !important;
+}
+#game-options-button {
+    left: 50% !important;
+    transform: translateX(-105%) !important;
+}
+#game-main-menu-button {
+    left: 50% !important;
+    transform: translateX(5%) !important;
+ }
 }
