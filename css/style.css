@@ -573,8 +573,11 @@ body {
 @media (max-width: 600px) {
     #creator-text {
         font-family: "Brush Script MT" , "Segoe Script" , cursive;
-        font-size: 20px;
+        font-size: 25px;
         font-weight: bold;
+    }
+    #version-text {
+        font-style: italic !important;
     }
     .menu-title {
         font-size: 25px;
