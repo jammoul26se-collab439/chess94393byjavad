@@ -162,6 +162,7 @@ function showOptionsMenu() {
     startBlock.classList.remove("main-menu");
     startBlock.classList.remove("sound-menu");
     startBlock.classList.remove("difficulty-menu");
+    startBlock.classList.remove("qr-menu");
     startBlock.classList.add("options-menu");
     startBlock.innerHTML = "";
     const title = document.createElement("div");
@@ -174,6 +175,12 @@ function showOptionsMenu() {
     const languageButton = document.createElement("button");
     languageButton.textContent = "Language";
     languageButton.className = "menu-button";
+    const qrButton = document.createElement("button");
+    qrButton.textContent = "QR Code";
+    qrButton.className = "menu-button";
+    qrButton.style.backgroundColor = "1e3a8a";
+    qrButton.style.color = "white";
+    qrButton.id = "qr-code-button";
     const returnButton = document.createElement("button");
     returnButton.textContent = "Return";
     returnButton.className = "return-button";
@@ -196,6 +203,32 @@ function showOptionsMenu() {
             soundButton.textContent = "Sound : Off";
             soundButton.style.backgroundColor = "red";
         }
+    }
+    function showQRCodeMenu() {
+        startBlock.classList.remove("main-menu");
+        startBlock.classList.remove("sound-menu");
+        startBlock.classList.remove("difficulty-menu");
+        startBlock.classList.remove("options-menu");
+        startBlock.classList.add("qr-menu");
+        startBlock.innerHTML = "";
+        const title = document.createElement("div");
+        title.textContent = "Scan Chess Game QR Code";
+        title.className = "menu-title";
+        const qrImage = document.createElement("img");
+        qrImage.src = "assets/images/QRGame.png";
+        qrImage.alt = "Chess Game QR Code";
+        qrImage.className = "qr-image";
+        const returnButton = document.createElement("button");
+        returnButton.textContent = "Return";
+        returnButton.className = "return-button";
+        returnButton.addEventListener("click", function() {
+            playClickSound();
+            showOptionsMenu();
+        });
+        startBlock.appendChild(title);
+        startBlock.appendChild(qrImage);
+        startBlock.appendChild(returnButton);
+        startBlock.style.display = "flex";
     }
     musicButton.addEventListener("click", function() {
         musicEnabled = !musicEnabled;
@@ -221,17 +254,22 @@ function showOptionsMenu() {
     languageButton.addEventListener("click", function() {
         playClickSound();
     });
+    qrButton.addEventListener("click", function() {
+        playClickSound();
+        showQRCodeMenu();
+    });
     returnButton.addEventListener("click", function() {
         playClickSound();
         showMainMenu();
     });
-    updateMusicButton();
-    updateSoundButton();
     startBlock.appendChild(title);
     startBlock.appendChild(musicButton);
     startBlock.appendChild(soundButton);
     startBlock.appendChild(languageButton);
+    startBlock.appendChild(qrButton);
     startBlock.appendChild(returnButton);
+    updateMusicButton();
+    updateSoundButton();
     startBlock.style.display = "flex";
 }
 function drawMoveDot(position) {
@@ -1716,4 +1754,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-// canvas  updateGameFooter() const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
+// canvas showOptionsMenu()  updateGameFooter() const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
