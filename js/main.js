@@ -306,6 +306,7 @@ function startTwoPlayersGame() {
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "2players";
+    resetPieces();
     startLoading(function() {
         startScreen.style.display = "none";
         gameStarted = true;
@@ -330,6 +331,7 @@ function startEasyAIGame() {
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "easyAI";
+    resetPieces();
     startLoading(function() {
         startScreen.style.display = "none";
         gameStarted = true;
@@ -423,6 +425,7 @@ function startHardAIGame() {
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "hardAI";
+    resetPieces();
     startLoading(function() {
         startScreen.style.display = "none";
         gameStarted = true;
@@ -447,6 +450,7 @@ function startNormalAIGame() {
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "normalAI";
+    resetPieces();
     startLoading(function() {
         startScreen.style.display = "none";
         gameStarted = true;
@@ -470,6 +474,7 @@ function startMakhloutaEasyAIGame() {
     firstMusic.pause();
     firstMusic.currentTime = 0;
     gameMode = "makhloutaEasyAI";
+    resetPieces();
     startLoading(function() {
         startScreen.style.display = "none";
         gameStarted = true;
@@ -650,6 +655,7 @@ let gameMode = "2players";
 let aiMoveTimeout = null;
 let gameOver = false;
 let hardAIThinking = false;
+let returnToMenuTimeout = null;
 drawBoard();
 function updateTimers() {
  whiteTimer.textContent = "00:" + String(whiteTime).padStart(2, "0"); 
@@ -1093,6 +1099,34 @@ function checkForCheckmate() {
     }
     return false;
 }
+function returnToMainMenuAfterGameOver() {
+    clearInterval(timerInterval);
+    if(aiMoveTimeout) {
+        clearTimeout(aiMoveTimeout);
+        aiMoveTimeout = null;
+    }
+    gameMusic.pause();
+    gameMusic.currentTime = 0;
+    youWinSound.pause();
+    youWinSound.currentTime = 0;
+    youLoseSound.pause();
+    youLoseSound.currentTime = 0;
+    gameOverMessage.style.display = "none";
+    checkMessage.style.display = "none";
+    timers.style.display = "none";
+    selectedPiece = null;
+    validMoves = [];
+    promotionPiece = null;
+    gameStarted = false;
+    gameOver = false;
+    hardAIThinking = false;
+    startScreen.style.display = "flex";
+    showMainMenu();
+    if(musicEnabled) {
+        firstMusic.currentTime = 0;
+        firstMusic.play();
+    }
+}
 function endGame(losingColor) {
     gameOver = true;
     clearInterval(timerInterval);
@@ -1142,6 +1176,87 @@ else {
         youWinSound.play();
     }
   }
+  clearTimeout(returnToMenuTimeout);
+    returnToMenuTimeout = setTimeout(() => {
+        returnToMainMenuAfterGameOver();
+    }, 15000);
+}
+function resetPieces() {
+    pieces.length = 0;
+    for(let column = 0; column < 8; column++) {
+        const position = String.fromCharCode(97 + column) + "2";
+        pieces.push(
+            new Piece("pawn","white", position, "assets/images/white-pawn.png"
+            )
+        );
+    }
+    for(let column of ["a", "h"]) {
+        pieces.push(
+            new Piece("rook", "white", column + "1", "assets/images/white-rook.png"
+            )
+        );
+    }
+    for(let column of ["b", "g"]) {
+        pieces.push(
+            new Piece("knight", "white", column + "1", "assets/images/white-knight.png"
+            )
+        );
+    }
+    for(let column of ["c", "f"]) {
+        pieces.push(
+            new Piece( "bishop" , "white", column + "1", "assets/images/white-bishop.png"
+            )
+        );
+    }
+    pieces.push(
+        new Piece(
+            "queen", "white", "d1", "assets/images/white-queen.png"
+        )
+    );
+    pieces.push(
+        new Piece(
+            "king", "white", "e1", "assets/images/white-king.png"
+        )
+    );
+    for(let column = 0; column < 8; column++) {
+        const position = String.fromCharCode(97 + column) + "7";
+        pieces.push(
+            new Piece(
+                "pawn", "black", position, "assets/images/black-pawn.png"
+            )
+        );
+    }
+    for(let column of ["a", "h"]) {
+        pieces.push(
+            new Piece(
+                "rook", "black", column + "8", "assets/images/black-rook.png"
+            )
+        );
+    }
+    for(let column of ["b", "g"]) {
+        pieces.push(
+            new Piece(
+                "knight", "black", column + "8", "assets/images/black-knight.png"
+            )
+        );
+    }
+    for(let column of ["c", "f"]) {
+        pieces.push(
+            new Piece(
+                "bishop", "black", column + "8", "assets/images/black-bishop.png"
+            )
+        );
+    }
+    pieces.push(
+        new Piece(
+            "queen", "black", "d8", "assets/images/black-queen.png"
+        )
+    );
+    pieces.push(
+        new Piece(
+            "king", "black", "e8", "assets/images/black-king.png"
+        )
+    );
 }
 function getPieceMoves(piece) {
     if(piece.type === "pawn")
@@ -1464,4 +1579,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-// const musicEnabled gameMusic.pause() switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
+// const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()

@@ -1,33 +1,32 @@
 #game-over-message {
-    display: none;
     position: fixed;
-    top: 75px;
-    left: 40%;
-    transform: translateY(-50%);
-    background-color: green;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    background-color: orange;
     color: white;
-    font-size: 30px;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px 20px;
-    margin:0;
+    font-size: 28px;
     width: 300px;
-    box-sizing: border-box;
-    z-index: 1000;
+    padding: 12px 20px;
+    text-align: center;
+    z-index: 9999;
+    display: none;
+    font-weight: bold;
 }
 #check-message {
-    display: none;
     position: fixed;
-    top: 50%;
-    left: calc(50% + 250px);
-    transform: translateY(-50%);
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    background-color: brown;
     color: white;
-    background-color: green;
     font-size: 28px;
     font-weight: bold;
-    border-radius: 8px;
-    padding: 15px 25px;
-    z-index: 1000;
+    width: 200px;
+    padding: 12px 20px;
+    text-align: center;
+    z-index: 9999;
+    display: none;
 }
 #timers {
     display: none;
