@@ -17,6 +17,21 @@ const youLoseSound = new Audio("assets/sounds/youLoseSoundTrick.mp4");
 youLoseSound.volume = 1;
 const checkMessage = document.getElementById("check-message");
 const gameOverMessage = document.getElementById("game-over-message");
+const waitTurnMessage = document.createElement("div");
+waitTurnMessage.textContent = "Please wait your turn";
+waitTurnMessage.style.position = "fixed";
+waitTurnMessage.style.left = "50%";
+waitTurnMessage.style.top = "45%";
+waitTurnMessage.style.transform = "translate(-50%, -50%)";
+waitTurnMessage.style.color = "red";
+waitTurnMessage.style.fontSize = "26px";
+waitTurnMessage.style.fontWeight = "bold";
+waitTurnMessage.style.padding = "12px 20px";
+waitTurnMessage.style.textAlign = "center";
+waitTurnMessage.style.zIndex = "9999";
+waitTurnMessage.style.display = "none";
+document.body.appendChild(waitTurnMessage);
+let waitTurnTimeout = null;
 let loadingDots = 1;
 let gameStarted = false;
 let loadingCycles = 0;
@@ -1521,9 +1536,14 @@ canvas.addEventListener("click", function(event) {
     }
     console.log("Position:", position);
     selectedPiece = pieces.find(piece => piece.position === position);
-   if((gameMode === "easyAI" || gameMode === "normalAI" || gameMode === "hardAI") && currentTurn === "black") {
+   if((gameMode === "easyAI" || gameMode === "normalAI" || gameMode === "hardAI" || gameMode === "makhloutaEasyAI") && currentTurn === "black") {
     selectedPiece = null;
     validMoves = [];
+    waitTurnMessage.style.display = "block";
+    clearTimeout(waitTurnTimeout);
+    waitTurnTimeout = setTimeout(() => {
+        waitTurnMessage.style.display = "none";
+    }, 1000);
     return;
 }
     if(selectedPiece && selectedPiece.color !== currentTurn) {
@@ -1579,4 +1599,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-// const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
+// canvas const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
