@@ -1,3 +1,26 @@
+#game-options-menu {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+}
+#game-options-button, #game-main-menu-button {
+    display: block !important;
+    width: 100px !important;
+    padding: 5px 8px !important;
+    font-size: 14px !important;
+    margin: 0 auto 5px auto !important;
+    position: relative !important;
+    top: -100px !important;
+    background-color: gray !important;
+    color: white !important;
+   /* border: 2px solid brown !important; */
+}
+#footer-right {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
 #game-over-message {
     position: fixed;
     left: 50%;
@@ -428,11 +451,15 @@ body {
 #creator-text {
     font-size: 21px;
     font-weight: bold;
+    position: relative;
+    top: -95px;
 }
 #copyright-text {
     font-size: 17px;
     margin-top: 5px;
     font-weight: normal;
+    position: relative;
+    top: -95px;
 }
 #chess-game-title {
     display: inline-block;
@@ -445,7 +472,7 @@ body {
 }
 #creator-text {
     font-family: "Brush Script MT","Segoe Script", cursive;
-    font-size: 20px;
+    font-size: 30px;
     font-style: italic;
 }
 @media (min-width: 601px) and (max-width: 900px) {

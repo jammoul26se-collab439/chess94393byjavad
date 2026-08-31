@@ -838,6 +838,11 @@ function updateTurnDisplay() {
         rightLabel.classList.remove("inactive-player");
     }
 }
+function closeInGameOptions() {
+    const gameOptionsBlock = document.getElementById("game-options-block");
+    if(gameOptionsBlock) 
+        gameOptionsBlock.style.display = "none";
+}
 function updateGameFooter() {
     let footer = document.getElementById("game-footer");
     if(!footer) {
@@ -851,12 +856,122 @@ function updateGameFooter() {
         leftSide.appendChild(versionText);
         const rightSide = document.createElement("div");
         rightSide.id = "footer-right";
+        rightSide.style.display = "flex";
+        rightSide.style.flexDirection = "column";
+        rightSide.style.alignItems = "center";
+        const gameOptionsButton = document.createElement("button");
+        gameOptionsButton.textContent = "Options";
+        gameOptionsButton.id = "game-options-button";
+        const mainMenuButton = document.createElement("button");
+        mainMenuButton.textContent = "Main Menu";
+        mainMenuButton.id = "game-main-menu-button";
         const creatorText = document.createElement("div");
         creatorText.id = "creator-text";
         creatorText.textContent = "By Jawad Jammoul";
         const copyrightText = document.createElement("div");
         copyrightText.id = "copyright-text";
         copyrightText.textContent = "© All Copyright Reserved";
+        const gameOptionsBlock = document.createElement("div");
+        gameOptionsBlock.id = "game-options-block";
+        gameOptionsBlock.style.position = "fixed";
+        gameOptionsBlock.style.left = "50%";
+        gameOptionsBlock.style.top = "50%";
+        gameOptionsBlock.style.transform = "translate(-50%, -50%)";
+        gameOptionsBlock.style.zIndex = "10000";
+        gameOptionsBlock.style.display = "none";
+        gameOptionsBlock.style.backgroundColor = "black";
+        gameOptionsBlock.style.padding = "15px";
+        gameOptionsBlock.style.borderRadius = "10px";
+        gameOptionsBlock.style.marginBottom = "10px";
+        gameOptionsBlock.style.width = "180px";
+        gameOptionsBlock.style.boxSizing = "border-box";
+        gameOptionsBlock.style.flexDirection = "column";
+        gameOptionsBlock.style.alignItems = "center";
+        gameOptionsBlock.style.gap = "8px";
+        const gameOptionsTitle = document.createElement("div");
+        gameOptionsTitle.textContent = "Options";
+        gameOptionsTitle.style.color = "white";
+        gameOptionsTitle.style.fontWeight = "bold";
+        gameOptionsTitle.style.fontSize = "20px";
+        gameOptionsTitle.style.marginBottom = "5px";
+        const volumeButton = document.createElement("button");
+        volumeButton.id = "game-volume-button";
+        volumeButton.style.width = "150px";
+        const musicButton = document.createElement("button");
+        musicButton.id = "game-music-button";
+        musicButton.style.width = "150px";
+        const returnOptionsButton = document.createElement("button");
+        returnOptionsButton.id = "game-options-return-button";
+        returnOptionsButton.textContent = "Return";
+        returnOptionsButton.style.width = "80px";
+        returnOptionsButton.style.backgroundColor = "gray";
+        returnOptionsButton.style.color = "white";
+        returnOptionsButton.style.fontSize = "14px";
+        returnOptionsButton.style.padding = "5px";
+        returnOptionsButton.addEventListener("click", function() {
+        playClickSound();
+        gameOptionsBlock.style.display = "none";
+});
+        function updateInGameOptionsButtons() {
+            if(soundsEnabled) {
+                volumeButton.textContent = "Volume : On";
+                volumeButton.style.backgroundColor = "green";
+            }
+            else {
+                volumeButton.textContent = "Volume : Off";
+                volumeButton.style.backgroundColor = "red";
+            }
+            if(musicEnabled) {
+                musicButton.textContent = "Music : On";
+                musicButton.style.backgroundColor = "green";
+            }
+            else {
+                musicButton.textContent = "Music : Off";
+                musicButton.style.backgroundColor = "red";
+            }
+        }
+        volumeButton.addEventListener("click", function() {
+            setSoundsEnabled(!soundsEnabled);
+            updateInGameOptionsButtons();
+        });
+        musicButton.addEventListener("click", function() {
+            musicEnabled = !musicEnabled;
+            gameMusic.muted = !musicEnabled;
+            firstMusic.muted = !musicEnabled;
+            if(musicEnabled) {
+                if(gameStarted) 
+                    gameMusic.play();
+                else 
+                    firstMusic.play();
+            }
+            else {
+                gameMusic.pause();
+                firstMusic.pause();
+            }
+            updateInGameOptionsButtons();
+        });
+        gameOptionsBlock.appendChild(gameOptionsTitle);
+        gameOptionsBlock.appendChild(volumeButton);
+        gameOptionsBlock.appendChild(musicButton);
+        gameOptionsBlock.appendChild(returnOptionsButton);
+        gameOptionsButton.addEventListener("click", function() {
+            playClickSound();
+            if(gameOptionsBlock.style.display === "none") {
+                updateInGameOptionsButtons();
+                gameOptionsBlock.style.display = "flex";
+            }
+            else {
+                gameOptionsBlock.style.display = "none";
+            }
+        });
+        mainMenuButton.addEventListener("click", function() {
+            playClickSound();
+            closeInGameOptions();
+            returnToMainMenuAfterGameOver();
+        });
+        rightSide.appendChild(gameOptionsBlock);
+        rightSide.appendChild(gameOptionsButton);
+        rightSide.appendChild(mainMenuButton);
         rightSide.appendChild(creatorText);
         rightSide.appendChild(copyrightText);
         footer.appendChild(leftSide);
@@ -1144,6 +1259,7 @@ function returnToMainMenuAfterGameOver() {
     }
 }
 function endGame(losingColor) {
+    closeInGameOptions();
     gameOver = true;
     clearInterval(timerInterval);
     gameMusic.pause();
@@ -1600,4 +1716,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-// canvas const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
+// canvas  updateGameFooter() const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
