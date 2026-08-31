@@ -778,11 +778,15 @@ body {
     z-index: 99999 !important;
 }
     #creator-text {
-        font-size: 17px;
+        font-size: 22px;
+        position: relative;
+        top: 35px;
     }
     #copyright-text {
         font-size: 14px;
         margin-top: 4px;
+        position: relative;
+        top: 35px;
     }
     #chess-game-title {
        font-size: 18px;
