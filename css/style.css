@@ -570,6 +570,10 @@ body {
     }
 }
 @media (max-width: 600px) {
+    .wait-turn-message {
+        font-size: 21px !important;
+        padding: 8px 12px !important;
+    }
     #creator-text {
         font-family: "Brush Script MT" , "Segoe Script" , cursive;
         font-size: 25px;

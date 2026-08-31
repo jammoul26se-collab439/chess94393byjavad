@@ -18,6 +18,7 @@ youLoseSound.volume = 1;
 const checkMessage = document.getElementById("check-message");
 const gameOverMessage = document.getElementById("game-over-message");
 const waitTurnMessage = document.createElement("div");
+waitTurnMessage.className = "wait-turn-message";
 waitTurnMessage.textContent = "Please wait your turn";
 waitTurnMessage.style.position = "fixed";
 waitTurnMessage.style.left = "50%";
