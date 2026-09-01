@@ -780,13 +780,13 @@ body {
     #creator-text {
         font-size: 22px;
         position: relative;
-        top: 25px;
+        top: 20px;
     }
     #copyright-text {
         font-size: 14px;
         margin-top: 4px;
         position: relative;
-        top: 25px;
+        top: 20px;
     }
     #chess-game-title {
        font-size: 18px;
