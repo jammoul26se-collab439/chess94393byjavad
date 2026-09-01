@@ -904,12 +904,9 @@ body {
     }
 
    #game-options-button, #game-main-menu-button {
-    position: relative !important;
-    top: 15px;
-    width:100px !important;
-    padding: 5px 8px !important;
-    margin: 0  3px!important;
-    display: inline-block !important;
+    position: static !important;
+    top: auto !important;
+    margin: 0 !important;
 }
 #game-options-button {
     left: 50% !important;
@@ -921,7 +918,9 @@ body {
  }
  #footer-right {
     display: flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
+    justify-content: center !important;
     align-items: center !important;
+    gap: 10px !important;
  }
 }
