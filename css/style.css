@@ -770,7 +770,7 @@ body {
     visibility: visible !important;
     opacity: 1 !important;
     left: 10px !important;
-    bottom: 130px !important;
+    bottom: 170px !important;
     top: auto !important;
     right: auto !important;
     color: white !important;
@@ -904,7 +904,7 @@ body {
     }
    #game-options-button, #game-main-menu-button {
     position: static !important;
-    top: 100px !important;
+    top: auto !important;
     left: auto !important;
     transform: none !important;
     margin: 0 !important;
