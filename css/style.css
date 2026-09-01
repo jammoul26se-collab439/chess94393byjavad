@@ -904,7 +904,7 @@ body {
     }
    #game-options-button, #game-main-menu-button {
     position: static !important;
-    top: auto !important;
+    top: 100px !important;
     left: auto !important;
     transform: none !important;
     margin: 0 !important;
