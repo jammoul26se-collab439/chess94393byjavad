@@ -1597,6 +1597,9 @@ function returnToMainMenuAfterGameOver() {
     gameOverMessage.style.display = "none";
     checkMessage.style.display = "none";
     timers.style.display = "none";
+    const gameFooter = document.getElementById("game-footer");
+    if(gameFooter)
+        gameFooter.style.display = "none";
     selectedPiece = null;
     validMoves = [];
     promotionPiece = null;
@@ -1863,6 +1866,9 @@ function minimax(depth, alpha, beta, maximizingPlayer) {
 }
 function setupGameInterface() {
     timers.style.display = "flex";
+    const gameFooter = document.getElementById("game-footer");
+    if(gameFooter)
+        gameFooter.style.display = "flex";
     updateTimers();
     updateGameModeDisplay();
     updateTurnDisplay();
@@ -2069,4 +2075,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-//startLoading() updateGameModeDisplay() waitTurnMessage.textContent endGame() mainMenuButton updateGameFooter showLanguageMenu returnToMainMenuAfterGameOver
+//setupGameInterface endGame() mainMenuButton updateGameFooter showLanguageMenu returnToMainMenuAfterGameOver
