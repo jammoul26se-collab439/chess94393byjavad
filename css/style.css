@@ -902,13 +902,13 @@ body {
     .chess-container {
         width: 100%;
     }
+
    #game-options-button, #game-main-menu-button {
-    position: relative !important;
-    top: 15px !important;
-    bottom: 85px !important;
-    width: 100px !important;
+    position: static !important;
+    width:100px !important;
+    padding: 5px 8px !important;
     margin: 0 !important;
-    z-index: 99999 !important;
+    display: inline-block !important;
 }
 #game-options-button {
     left: 50% !important;
@@ -917,5 +917,10 @@ body {
 #game-main-menu-button {
     left: 50% !important;
     transform: translateX(5%) !important;
+ }
+ #footer-right {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
  }
 }
