@@ -903,7 +903,7 @@ body {
         width: 100%;
     }
    #game-options-button, #game-main-menu-button {
-    position: fixed !important;
+    position: relative !important;
     top: 15px !important;
     bottom: 85px !important;
     width: 100px !important;
