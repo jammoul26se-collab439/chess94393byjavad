@@ -2,6 +2,247 @@ var canvas = document.getElementById("chess-board");
 var ctx = canvas.getContext("2d");
 canvas.width = 480;
 canvas.height = 480;
+let currentLanguage = "en";
+const translations = {
+    en: {
+        loading: "Loading",
+        enableSounds: "Enable Sounds?",
+        yes: "Yes",
+        no: "No",
+        chessGameBy: "Chess Game By Jawad Jammoul",
+        start: "Start",
+        options: "Options",
+        aboutUs: "About-Us",
+        exit: "Exit",
+        musicOn: "Music : On",
+        musicOff: "Music : Off",
+        soundOn: "Sound : On",
+        soundOff: "Sound : Off",
+        language: "Language",
+        qrCode: "QR Code",
+        return: "Return",
+        scanQRCode: "Scan Chess Game QR Code",
+        selectDifficulty: "Please Select Difficulty",
+        easyAI: "Easy AI",
+        normalAI: "Normal AI",
+        hardAI: "Hard AI",
+        makhloutaEasyAI: "Makhlouta Easy AI",
+        twoPlayers: "2 Players",
+        playerTurn: "Player Turn",
+        easyAITurn: "Easy AI Turn",
+        normalAITurn: "Normal AI Turn",
+        hardAITurn: "Hard AI Turn",
+        chessGame: "Chess Game",
+        version: "Version 1.46",
+        byJawad: "By Jawad Jammoul",
+        copyright: "© All Copyright Reserved",
+        mainMenu: "Main Menu",
+        easyAIWin: "Easy AI Win",
+        normalAIWin: "Normal AI Win",
+        hardAIWin: "Hard AI Win",
+        makhloutaEasyAIWin: "Makhlouta Easy AI Win",
+        playerWin: "Player Win",
+        player1: "Player 1",
+        player1Turn: "Player 1 Turn",
+        player2: "Player 2",
+        player2Turn: "Player 2 Turn",
+        player02Win: "Player 02 Win",
+        player01Win: "Player 01 Win",
+        player: "Player",
+        waitYourTurn: "Please wait your turn"
+    },
+    fr: {
+        loading: "Chargement",
+        enableSounds: "Activer les sons ?",
+        yes: "Oui",
+        no: "Non",
+        chessGameBy: "Jeu d'échecs par Jawad Jammoul",
+        start: "Démarrer",
+        options: "Options",
+        aboutUs: "À propos de nous",
+        exit: "Quitter",
+        musicOn: "Musique : Activée",
+        musicOff: "Musique : Désactivée",
+        soundOn: "Son : Activé",
+        soundOff: "Son : Désactivé",
+        language: "Langue",
+        qrCode: "Code QR",
+        return: "Retour",
+        scanQRCode: "Scanner le code QR du jeu d'échecs",
+        selectDifficulty: "Veuillez sélectionner la difficulté",
+        easyAI: "IA facile",
+        normalAI: "IA normale",
+        hardAI: "IA difficile",
+        makhloutaEasyAI: "IA facile Makhlouta",
+        twoPlayers: "2 joueurs",
+        playerTurn: "Tour du joueur",
+        easyAITurn: "Tour de l'IA facile",
+        normalAITurn: "Tour de l'IA normale",
+        hardAITurn: "Tour de l'IA difficile",
+        chessGame: "Jeu d'échecs",
+        version: "Version 1.46",
+        byJawad: "Par Jawad Jammoul",
+        copyright: "© Tous droits réservés",
+        mainMenu: "Menu principal",
+        easyAIWin: "Victoire de l'IA facile",
+        normalAIWin: "Victoire de l'IA normale",
+        hardAIWin: "Victoire de l'IA difficile",
+        makhloutaEasyAIWin: "Victoire de l'IA facile Makhlouta",
+        playerWin: "Victoire du joueur",
+        player1: "Joueur 1",
+        player1Turn: "Tour du joueur 1",
+        player2: "Joueur 2",
+        player2Turn: "Tour du joueur 2",
+        player02Win: "Victoire du joueur 02",
+        player01Win: "Victoire du joueur 01",
+        player: "Joueur",
+        waitYourTurn: "Veuillez attendre votre tour"
+    },
+    es: {
+        loading: "Cargando",
+        enableSounds: "¿Activar sonidos?",
+        yes: "Sí",
+        no: "No",
+        chessGameBy: "Juego de ajedrez por Jawad Jammoul",
+        start: "Iniciar",
+        options: "Opciones",
+        aboutUs: "Sobre nosotros",
+        exit: "Salir",
+        musicOn: "Música : Activada",
+        musicOff: "Música : Desactivada",
+        soundOn: "Sonido : Activado",
+        soundOff: "Sonido : Desactivado",
+        language: "Idioma",
+        qrCode: "Código QR",
+        return: "Volver",
+        scanQRCode: "Escanear código QR del juego de ajedrez",
+        selectDifficulty: "Seleccione la dificultad",
+        easyAI: "IA fácil",
+        normalAI: "IA normal",
+        hardAI: "IA difícil",
+        makhloutaEasyAI: "IA fácil Makhlouta",
+        twoPlayers: "2 jugadores",
+        playerTurn: "Turno del jugador",
+        easyAITurn: "Turno de la IA fácil",
+        normalAITurn: "Turno de la IA normal",
+        hardAITurn: "Turno de la IA difícil",
+        chessGame: "Juego de ajedrez",
+        version: "Versión 1.46",
+        byJawad: "Por Jawad Jammoul",
+        copyright: "© Todos los derechos reservados",
+        mainMenu: "Menú principal",
+        easyAIWin: "Victoria de la IA fácil",
+        normalAIWin: "Victoria de la IA normal",
+        hardAIWin: "Victoria de la IA difícil",
+        makhloutaEasyAIWin: "Victoria de la IA fácil Makhlouta",
+        playerWin: "Victoria del jugador",
+        player1: "Jugador 1",
+        player1Turn: "Turno del jugador 1",
+        player2: "Jugador 2",
+        player2Turn: "Turno del jugador 2",
+        player02Win: "Victoria del jugador 02",
+        player01Win: "Victoria del jugador 01",
+        player: "Jugador",
+        waitYourTurn: "Por favor espera tu turno"
+    },
+    ru: {
+        loading: "Загрузка",
+        enableSounds: "Включить звуки?",
+        yes: "Да",
+        no: "Нет",
+        chessGameBy: "Шахматная игра от Jawad Jammoul",
+        start: "Начать",
+        options: "Настройки",
+        aboutUs: "О нас",
+        exit: "Выход",
+        musicOn: "Музыка : Вкл.",
+        musicOff: "Музыка : Выкл.",
+        soundOn: "Звук : Вкл.",
+        soundOff: "Звук : Выкл.",
+        language: "Язык",
+        qrCode: "QR-код",
+        return: "Назад",
+        scanQRCode: "Сканировать QR-код шахматной игры",
+        selectDifficulty: "Выберите уровень сложности",
+        easyAI: "Лёгкий ИИ",
+        normalAI: "Обычный ИИ",
+        hardAI: "Сложный ИИ",
+        makhloutaEasyAI: "Лёгкий ИИ Makhlouta",
+        twoPlayers: "2 игрока",
+        playerTurn: "Ход игрока",
+        easyAITurn: "Ход лёгкого ИИ",
+        normalAITurn: "Ход обычного ИИ",
+        hardAITurn: "Ход сложного ИИ",
+        chessGame: "Шахматная игра",
+        version: "Версия 1.46",
+        byJawad: "Автор: Jawad Jammoul",
+        copyright: "© Все права защищены",
+        mainMenu: "Главное меню",
+        easyAIWin: "Победа лёгкого ИИ",
+        normalAIWin: "Победа обычного ИИ",
+        hardAIWin: "Победа сложного ИИ",
+        makhloutaEasyAIWin: "Победа лёгкого ИИ Makhlouta",
+        playerWin: "Победа игрока",
+        player1: "Игрок 1",
+        player1Turn: "Ход игрока 1",
+        player2: "Игрок 2",
+        player2Turn: "Ход игрока 2",
+        player02Win: "Победа игрока 02",
+        player01Win: "Победа игрока 01",
+        player: "Игрок",
+        waitYourTurn: "Пожалуйста, дождитесь своего хода"
+    },
+    ar: {
+        loading: "جار التحميل",
+        enableSounds: "تفعيل الأصوات ؟",
+        yes: "نعم",
+        no: "لا",
+        chessGameBy: "لعبة الشطرنج من تطوير Jawad Jammoul",
+        start: "ابدأ",
+        options: "الخيارات",
+        aboutUs: "معلومات عنا",
+        exit: "خروج",
+        musicOn: "الموسيقى : مفعلة",
+        musicOff: "الموسيقى : متوقفة",
+        soundOn: "الصوت : مفعل",
+        soundOff: "الصوت : متوقف",
+        language: "اللغة",
+        qrCode: "رمز QR",
+        return: "عودة",
+        scanQRCode: "امسح رمز QR الخاص بلعبة الشطرنج",
+        selectDifficulty: "الرجاء اختيار مستوى الصعوبة",
+        easyAI: "ذكاء اصطناعي سهل",
+        normalAI: "ذكاء اصطناعي عادي",
+        hardAI: "ذكاء اصطناعي صعب",
+        makhloutaEasyAI: "ذكاء اصطناعي سهل Makhlouta",
+        twoPlayers: "لاعبان",
+        playerTurn: "دور اللاعب",
+        easyAITurn: "دور الذكاء الاصطناعي السهل",
+        normalAITurn: "دور الذكاء الاصطناعي العادي",
+        hardAITurn: "دور الذكاء الاصطناعي الصعب",
+        chessGame: "لعبة الشطرنج",
+        version: "الإصدار 1.46",
+        byJawad: "من تطوير Jawad Jammoul",
+        copyright: "© جميع الحقوق محفوظة",
+        mainMenu: "القائمة الرئيسية",
+        easyAIWin: "فوز الذكاء الاصطناعي السهل",
+        normalAIWin: "فوز الذكاء الاصطناعي العادي",
+        hardAIWin: "فوز الذكاء الاصطناعي الصعب",
+        makhloutaEasyAIWin: "فوز الذكاء الاصطناعي السهل Makhlouta",
+        playerWin: "فوز اللاعب",
+        player1: "اللاعب 1",
+        player1Turn: "دور اللاعب 1",
+        player2: "اللاعب 2",
+        player2Turn: "دور اللاعب 2",
+        player02Win: "فوز اللاعب 02",
+        player01Win: "فوز اللاعب 01",
+        player: "اللاعب",
+        waitYourTurn: "الرجاء انتظار دورك"
+    }
+};
+function t(key) {
+    return translations[currentLanguage][key] || translations.en[key] || key;
+}
 const squareSize = 60;
 const startScreen = document.getElementById("start-screen");
 const loadingText = document.getElementById("loading-text");
@@ -19,7 +260,7 @@ const checkMessage = document.getElementById("check-message");
 const gameOverMessage = document.getElementById("game-over-message");
 const waitTurnMessage = document.createElement("div");
 waitTurnMessage.className = "wait-turn-message";
-waitTurnMessage.textContent = "Please wait your turn";
+waitTurnMessage.textContent = t("waitYourTurn");
 waitTurnMessage.style.position = "fixed";
 waitTurnMessage.style.left = "50%";
 waitTurnMessage.style.top = "45%";
@@ -43,6 +284,7 @@ firstMusic.loop = true;
 firstMusic.volume = 0.8;
 const clickSound = new Audio("assets/sounds/ClickSoundTrack.m4a");
 clickSound.volume = 1;
+
 function playClickSound() {
     if(!soundsEnabled)
         return;
@@ -55,7 +297,7 @@ function startLoading(callback) {
     loadingDots = 1;
     loadingCycles = 0;
     const loadingInterval = setInterval(() => {
-        loadingText.textContent = "Loading" + ".".repeat(loadingDots);
+        loadingText.textContent = t("loading") + ".".repeat(loadingDots);
         loadingDots++;
         if(loadingDots > 3) {
             loadingDots = 1;
@@ -84,15 +326,15 @@ function showSoundMenu() {
     startBlock.innerHTML = "";
     startBlock.classList.add("sound-menu");
     const title = document.createElement("div");
-    title.textContent = "Enable Sounds?";
+    title.textContent = t("enableSounds");
     title.className = "menu-title";
     const buttonsContainer = document.createElement("div");
     buttonsContainer.className = "menu-buttons";
     const yesButton = document.createElement("button");
-    yesButton.textContent = "YES";
+    yesButton.textContent = t("yes");
     yesButton.className = "menu-button";
     const noButton = document.createElement("button");
-    noButton.textContent = "NO";
+    noButton.textContent = t("no");
     noButton.className = "menu-button";
     yesButton.addEventListener("click", function() {
         setSoundsEnabled(true);
@@ -121,19 +363,19 @@ function showMainMenu() {
     startBlock.classList.add("main-menu");
     startBlock.innerHTML = "";
     const title = document.createElement("div");
-    title.textContent = "Chess Game By Jawad Jammoul";
+    title.textContent = t("chessGameBy");
     title.className = "menu-title";
     const startButton = document.createElement("button");
-    startButton.textContent = "Start";
+    startButton.textContent = t("start");
     startButton.className = "menu-button";
     const optionsButton = document.createElement("button");
-    optionsButton.textContent = "Options";
+    optionsButton.textContent = t("options");
     optionsButton.className = "menu-button";
     const aboutButton = document.createElement("button");
-    aboutButton.textContent = "About-Us";
+    aboutButton.textContent = t("aboutUs");
     aboutButton.className = "menu-button";
     const exitButton = document.createElement("button");
-    exitButton.textContent = "Exit";
+    exitButton.textContent = t("exit");
     exitButton.className = "menu-button";
     startButton.addEventListener("click", playClickSound);
     optionsButton.addEventListener("click", playClickSound);
@@ -166,41 +408,41 @@ function showOptionsMenu() {
     startBlock.classList.add("options-menu");
     startBlock.innerHTML = "";
     const title = document.createElement("div");
-    title.textContent = "Options";
+    title.textContent = t("options");
     title.className = "menu-title";
     const musicButton = document.createElement("button");
     musicButton.className = "menu-button";
     const soundButton = document.createElement("button");
     soundButton.className = "menu-button";
     const languageButton = document.createElement("button");
-    languageButton.textContent = "Language";
+    languageButton.textContent = t("language");
     languageButton.className = "menu-button";
     const qrButton = document.createElement("button");
-    qrButton.textContent = "QR Code";
+    qrButton.textContent = t("qrCode");
     qrButton.className = "menu-button";
     qrButton.style.backgroundColor = "1e3a8a";
     qrButton.style.color = "white";
     qrButton.id = "qr-code-button";
     const returnButton = document.createElement("button");
-    returnButton.textContent = "Return";
+    returnButton.textContent = t("return");
     returnButton.className = "return-button";
     function updateMusicButton() {
         if(musicEnabled) {
-            musicButton.textContent = "Music : On";
+            musicButton.textContent = t("musicOn");
             musicButton.style.backgroundColor = "green";
         }
         else {
-            musicButton.textContent = "Music : Off";
+            musicButton.textContent = t("musicOff");
             musicButton.style.backgroundColor = "red";
         }
     }
     function updateSoundButton() {
         if(soundsEnabled) {
-            soundButton.textContent = "Sound : On";
+            soundButton.textContent = t("soundOn");
             soundButton.style.backgroundColor = "green";
         }
         else {
-            soundButton.textContent = "Sound : Off";
+            soundButton.textContent = t("soundOff");
             soundButton.style.backgroundColor = "red";
         }
     }
@@ -212,14 +454,14 @@ function showOptionsMenu() {
         startBlock.classList.add("qr-menu");
         startBlock.innerHTML = "";
         const title = document.createElement("div");
-        title.textContent = "Scan Chess Game QR Code";
+        title.textContent = t("scanQRCode");
         title.className = "menu-title";
         const qrImage = document.createElement("img");
         qrImage.src = "assets/images/QRGame.png";
         qrImage.alt = "Chess Game QR Code";
         qrImage.className = "qr-image";
         const returnButton = document.createElement("button");
-        returnButton.textContent = "Return";
+        returnButton.textContent = t("return");
         returnButton.className = "return-button";
         returnButton.addEventListener("click", function() {
             playClickSound();
@@ -253,6 +495,7 @@ function showOptionsMenu() {
     });
     languageButton.addEventListener("click", function() {
         playClickSound();
+        showLanguageMenu();
     });
     qrButton.addEventListener("click", function() {
         playClickSound();
@@ -270,6 +513,57 @@ function showOptionsMenu() {
     startBlock.appendChild(returnButton);
     updateMusicButton();
     updateSoundButton();
+    startBlock.style.display = "flex";
+}
+function showLanguageMenu() {
+    startBlock.classList.remove("main-menu");
+    startBlock.classList.remove("sound-menu");
+    startBlock.classList.remove("difficulty-menu");
+    startBlock.classList.remove("qr-menu");
+    startBlock.classList.remove("options-menu");
+    startBlock.classList.add("language-menu");
+    startBlock.innerHTML = "";
+    const languages = [
+        {
+            name: "English",
+            code: "en"
+        },
+        {
+            name: "Français",
+            code: "fr"
+        },
+        {
+            name: "Español",
+            code: "es"
+        },
+        {
+            name: "Русский",
+            code: "ru"
+        },
+        {
+            name: "اللغة العربية",
+            code: "ar"
+        }
+    ];
+    for(let language of languages) {
+        const button = document.createElement("button");
+        button.textContent = language.name;
+        button.className = "menu-button";
+        button.addEventListener("click", function() {
+            playClickSound();
+            currentLanguage = language.code;
+            showOptionsMenu();
+        });
+        startBlock.appendChild(button);
+    }
+    const returnButton = document.createElement("button");
+    returnButton.textContent = t("return");
+    returnButton.className = "return-button";
+    returnButton.addEventListener("click", function() {
+        playClickSound();
+        showOptionsMenu();
+    });
+    startBlock.appendChild(returnButton);
     startBlock.style.display = "flex";
 }
 function drawMoveDot(position) {
@@ -303,25 +597,25 @@ function showDifficultyMenu() {
     startBlock.classList.add("difficulty-menu");
     startBlock.innerHTML = "";
     const title = document.createElement("div");
-    title.textContent = "Please Select Difficulty";
+    title.textContent = t("selectDifficulty");
     title.className = "menu-title";
     const easyButton = document.createElement("button");
-    easyButton.textContent = "Easy AI";
+    easyButton.textContent = t("easyAI");
     easyButton.className = "menu-button";
     const normalButton = document.createElement("button");
-    normalButton.textContent = "Normal AI";
+    normalButton.textContent = t("normalAI");
     normalButton.className = "menu-button";
     const hardButton = document.createElement("button");
-    hardButton.textContent = "Hard AI";
+    hardButton.textContent = t("hardAI");
     hardButton.className = "menu-button";
     const twoPlayersButton = document.createElement("button");
-    twoPlayersButton.textContent = "2 Players";
+    twoPlayersButton.textContent = t("twoPlayers");
     twoPlayersButton.className = "menu-button";
     const makhloutaButton = document.createElement("button");
-    makhloutaButton.textContent = "Makhlouta Easy AI";
+    makhloutaButton.textContent = t("makhloutaEasyAI");
     makhloutaButton.className = "menu-button";
     const returnButton = document.createElement("button");
-    returnButton.textContent = "Return";
+    returnButton.textContent = t("return");
     returnButton.className = "return-button";
     easyButton.addEventListener("click", playClickSound);
     normalButton.addEventListener("click", playClickSound);
@@ -718,15 +1012,15 @@ function updateTimers() {
 function updateGameModeDisplay() {
     let aiName;
     if(gameMode === "easyAI")
-        aiName = "Easy AI";
+        aiName = t("easyAI");
     else if(gameMode === "normalAI")
-        aiName = "Normal AI";
+        aiName = t("normalAI");
     else if(gameMode === "hardAI")
-        aiName = "Hard AI";
+        aiName = t("hardAI");
     else if(gameMode === "makhloutaEasyAI")
-        aiName = "Makhlouta Easy AI";
+        aiName = t("makhloutaEasyAI");
     else
-        aiName = "Player 2";
+        aiName = t("player2");
     let leftLabel = document.getElementById("left-player-label");
     let rightLabel = document.getElementById("right-player-label");
     if(!leftLabel) {
@@ -740,13 +1034,13 @@ function updateGameModeDisplay() {
         timers.appendChild(rightLabel);
     }
     if(gameMode === "2players") {
-        leftLabel.textContent = currentTurn === "black" ? "Player 2 Turn" : "Player 2";
-        rightLabel.textContent = currentTurn === "white" ? "Player 1 Turn" : "Player 1";
-    }
-    else {
-        leftLabel.textContent = currentTurn === "black" ? aiName + " Turn" : aiName;
-        rightLabel.textContent = currentTurn === "white" ? "Player Turn" : "Player";
-    }
+    leftLabel.textContent = currentTurn === "black" ? t("player2Turn") : t("player2");
+    rightLabel.textContent = currentTurn === "white" ? t("player1Turn") : t("player1");
+}
+else {
+    leftLabel.textContent = currentTurn === "black" ? aiName + " " + getTurnWord() : aiName;
+    rightLabel.textContent = currentTurn === "white" ? t("playerTurn") : t("player");
+}
     if(currentTurn === "black") {
         leftLabel.classList.add("active-player");
         leftLabel.classList.remove("inactive-player");
@@ -844,24 +1138,25 @@ function updateTurnDisplay() {
     const rightLabel = document.getElementById("right-player-label");
     if(!leftLabel || !rightLabel)
         return;
-    let aiName;
-    if(gameMode === "easyAI")
-        aiName = "Easy AI";
-    else if(gameMode === "normalAI")
-        aiName = "Normal AI";
-    else if(gameMode === "hardAI")
-        aiName = "Hard AI";
-    else if(gameMode === "makhloutaEasyAI")
-        aiName = "Makhlouta Easy AI";
-    else
-        aiName = "Player 2";
     if(gameMode === "2players") {
-        leftLabel.textContent = currentTurn === "black" ? "Player 2 Turn" : "Player 2";
-        rightLabel.textContent = currentTurn === "white" ? "Player 1 Turn" : "Player 1";
+        leftLabel.textContent = currentTurn === "black" ? t("player2Turn") : t("player2");
+        rightLabel.textContent = currentTurn === "white" ? t("player1Turn") : t("player1");
     }
-    else {
-        leftLabel.textContent = currentTurn === "black" ? aiName + " Turn" : aiName;
-        rightLabel.textContent = currentTurn === "white" ? "Player Turn" : "Player";
+    else if(gameMode === "easyAI") {
+        leftLabel.textContent = currentTurn === "black" ? t("easyAITurn") : t("easyAI");
+        rightLabel.textContent = currentTurn === "white" ? t("playerTurn") : t("player");
+    }
+    else if(gameMode === "normalAI") {
+        leftLabel.textContent = currentTurn === "black" ? t("normalAITurn") : t("normalAI");
+        rightLabel.textContent = currentTurn === "white" ? t("playerTurn") : t("player");
+    }
+    else if(gameMode === "hardAI") {
+        leftLabel.textContent = currentTurn === "black" ? t("hardAITurn") : t("hardAI");
+        rightLabel.textContent = currentTurn === "white" ? t("playerTurn") : t("player");
+    }
+    else if(gameMode === "makhloutaEasyAI") {
+    leftLabel.textContent = currentTurn === "black" ? t("makhloutaEasyAI") : t("makhloutaEasyAI");
+    rightLabel.textContent = currentTurn === "white" ? t("playerTurn") : t("player");
     }
     if(currentTurn === "black") {
         leftLabel.classList.add("active-player");
@@ -890,7 +1185,7 @@ function updateGameFooter() {
         leftSide.id = "footer-left";
         const versionText = document.createElement("div");
         versionText.id = "version-text";
-        versionText.textContent = "Version 1.46";
+        versionText.textContent = t("version");
         leftSide.appendChild(versionText);
         const rightSide = document.createElement("div");
         rightSide.id = "footer-right";
@@ -898,17 +1193,17 @@ function updateGameFooter() {
         rightSide.style.flexDirection = "column";
         rightSide.style.alignItems = "center";
         const gameOptionsButton = document.createElement("button");
-        gameOptionsButton.textContent = "Options";
+        gameOptionsButton.textContent = t("options");
         gameOptionsButton.id = "game-options-button";
         const mainMenuButton = document.createElement("button");
-        mainMenuButton.textContent = "Main Menu";
+        mainMenuButton.textContent = t("mainmenu");
         mainMenuButton.id = "game-main-menu-button";
         const creatorText = document.createElement("div");
         creatorText.id = "creator-text";
-        creatorText.textContent = "By Jawad Jammoul";
+        creatorText.textContent = t("byJawad");
         const copyrightText = document.createElement("div");
         copyrightText.id = "copyright-text";
-        copyrightText.textContent = "© All Copyright Reserved";
+        copyrightText.textContent = t("copyright");
         const gameOptionsBlock = document.createElement("div");
         gameOptionsBlock.id = "game-options-block";
         gameOptionsBlock.style.position = "fixed";
@@ -927,7 +1222,7 @@ function updateGameFooter() {
         gameOptionsBlock.style.alignItems = "center";
         gameOptionsBlock.style.gap = "8px";
         const gameOptionsTitle = document.createElement("div");
-        gameOptionsTitle.textContent = "Options";
+        gameOptionsTitle.textContent = t("options");
         gameOptionsTitle.style.color = "white";
         gameOptionsTitle.style.fontWeight = "bold";
         gameOptionsTitle.style.fontSize = "20px";
@@ -940,7 +1235,7 @@ function updateGameFooter() {
         musicButton.style.width = "150px";
         const returnOptionsButton = document.createElement("button");
         returnOptionsButton.id = "game-options-return-button";
-        returnOptionsButton.textContent = "Return";
+        returnOptionsButton.textContent = t("return");
         returnOptionsButton.style.width = "80px";
         returnOptionsButton.style.backgroundColor = "gray";
         returnOptionsButton.style.color = "white";
@@ -1305,48 +1600,49 @@ function endGame(losingColor) {
     selectedPiece = null;
     validMoves = [];
     checkMessage.style.display = "none";
-   if(gameMode === "easyAI") {
-    if(losingColor === "white") 
-        gameOverMessage.textContent = "Easy Ai Win";
-    else 
-        gameOverMessage.textContent = "Player Win";
-}
-else if(gameMode === "normalAI") {
-    if(losingColor === "white")
-        gameOverMessage.textContent = "Normal AI Win";
-    else 
-        gameOverMessage.textContent = "Player Win";
-}
-else if(gameMode === "hardAI") {
-    if(losingColor === "white") 
-        gameOverMessage.textContent = "Hard AI Win";
-    else 
-        gameOverMessage.textContent = "Player Win";
-}
-else if(gameMode === "makhloutaEasyAI") {
-    if(losingColor === "white") 
-        gameOverMessage.textContent = "Makhlouta Easy AI Win";
-    else
-        gameOverMessage.textContent = "Player Win";
-}
-else {
-    if(losingColor === "white")
-        gameOverMessage.textContent = "Player 02 Win";
-    else
-        gameOverMessage.textContent = "Player 01 Win";
-}
-    gameOverMessage.style.display = "block";
-  if(soundsEnabled && musicEnabled) {
-    if(losingColor === "white" && gameMode !== "2players") {
-        youLoseSound.currentTime = 0;
-        youLoseSound.play();
+    if(gameMode === "easyAI") {
+        if(losingColor === "white")
+            gameOverMessage.textContent = t("easyAIWin");
+        else
+            gameOverMessage.textContent = t("playerWin");
+    }
+    else if(gameMode === "normalAI") {
+        if(losingColor === "white")
+            gameOverMessage.textContent = t("normalAIWin");
+        else
+            gameOverMessage.textContent = t("playerWin");
+    }
+    else if(gameMode === "hardAI") {
+        if(losingColor === "white")
+            gameOverMessage.textContent = t("hardAIWin");
+        else
+            gameOverMessage.textContent = t("playerWin");
+    }
+    else if(gameMode === "makhloutaEasyAI") {
+        if(losingColor === "white")
+            gameOverMessage.textContent = t("makhloutaEasyAIWin");
+        else
+            gameOverMessage.textContent = t("playerWin");
     }
     else {
-        youWinSound.currentTime = 0;
-        youWinSound.play();
+        if(losingColor === "white")
+            gameOverMessage.textContent = t("player02Win");
+        else
+            gameOverMessage.textContent = t("player01Win");
     }
-  }
-  clearTimeout(returnToMenuTimeout);
+    gameOverMessage.style.display = "block";
+    if(soundsEnabled && musicEnabled) {
+        if(losingColor === "white" && gameMode !== "2players") {
+            youLoseSound.currentTime = 0;
+            youLoseSound.play();
+
+        }
+        else {
+            youWinSound.currentTime = 0;
+            youWinSound.play();
+        }
+    }
+    clearTimeout(returnToMenuTimeout);
     returnToMenuTimeout = setTimeout(() => {
         returnToMainMenuAfterGameOver();
     }, 15000);
@@ -1754,4 +2050,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-// canvas showOptionsMenu()  updateGameFooter() const musicEnabled gameMusic.pause() aiMoveTimeout switchTurn() endGame() showDifficultyMenu() gameMode getPieceMoves() startTimer() makeEasyAIMove() updateTurnDisplay() startTwoPlayersGame() updateGameModeDisplay()
+//startLoading() updateGameModeDisplay() waitTurnMessage.textContent endGame()
