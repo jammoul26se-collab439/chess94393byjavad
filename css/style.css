@@ -523,7 +523,73 @@ body {
     font-size: 30px;
     font-style: italic;
 }
+#start-block.language-menu {
+    width: 320px;
+    height: 390px;
+    padding: 25px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: black;
+}
+#start-block.language-menu .menu-button {
+    width: 200px;
+    height: 42px;
+    padding: 7px 10px;
+    margin: 2px 0;
+    background-color: orange;
+    color: black;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+#start-block.language-menu .menu-button:hover {
+    background-color: #ffb733;
+    transform: scale(1.05);
+}
+#start-block.language-menu .return-button {
+    width: 100px;
+    height: 30px;
+    padding: 4px 8px;
+    margin: 12px 0 0 0;
+    background-color: #555555;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+#start-block.language-menu .return-button:hover {
+    background-color: #777777;
+    transform: scale(1.05);
+}
 @media (min-width: 601px) and (max-width: 900px) {
+    #start-block.language-menu {
+        width: 300px;
+        height: 370px;
+        padding: 22px;
+        gap: 7px;
+    }
+    #start-block.language-menu .menu-button {
+        width: 190px;
+        height: 40px;
+        padding: 6px 9px;
+        font-size: 16px;
+    }
+    #start-block.language-menu .return-button {
+        width: 100px;
+        height: 30px;
+        font-size: 14px;
+        margin-top: 10px;
+    }
     #start-block.qr-menu {
     width: 340px;
     height: 480px;
@@ -664,6 +730,27 @@ body {
     }
 }
 @media (max-width: 600px) {
+    #start-block.language-menu {
+        width: 280px;
+        height: 390px;
+        padding: 15px;
+        gap: 5px;
+        transform: translateY(-25px);
+    }
+    #start-block.language-menu .menu-button {
+        width: 180px;
+        height: 38px;
+        padding: 5px 8px;
+        margin: 2px 0;
+        font-size: 15px;
+    }
+    #start-block.language-menu .return-button {
+        width: 90px;
+        height: 28px;
+        padding: 4px 7px;
+        margin-top: 9px;
+        font-size: 13px;
+    }
     #start-block.qr-menu {
     width: 300px;
     height: 390px;

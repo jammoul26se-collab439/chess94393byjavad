@@ -552,6 +552,10 @@ function showLanguageMenu() {
         button.addEventListener("click", function() {
             playClickSound();
             currentLanguage = language.code;
+            updateGameFooter();
+            updateGameModeDisplay();
+            updateTurnDisplay();
+            waitTurnMessage.textContent =  t("waitYourTurn");
             showOptionsMenu();
         });
         startBlock.appendChild(button);
@@ -1196,7 +1200,7 @@ function updateGameFooter() {
         gameOptionsButton.textContent = t("options");
         gameOptionsButton.id = "game-options-button";
         const mainMenuButton = document.createElement("button");
-        mainMenuButton.textContent = t("mainmenu");
+        mainMenuButton.textContent = t("mainMenu");
         mainMenuButton.id = "game-main-menu-button";
         const creatorText = document.createElement("div");
         creatorText.id = "creator-text";
@@ -1242,9 +1246,9 @@ function updateGameFooter() {
         returnOptionsButton.style.fontSize = "14px";
         returnOptionsButton.style.padding = "5px";
         returnOptionsButton.addEventListener("click", function() {
-        playClickSound();
-        gameOptionsBlock.style.display = "none";
-});
+            playClickSound();
+            gameOptionsBlock.style.display = "none";
+        });
         function updateInGameOptionsButtons() {
             if(soundsEnabled) {
                 volumeButton.textContent = "Volume : On";
@@ -1272,9 +1276,9 @@ function updateGameFooter() {
             gameMusic.muted = !musicEnabled;
             firstMusic.muted = !musicEnabled;
             if(musicEnabled) {
-                if(gameStarted) 
+                if(gameStarted)
                     gameMusic.play();
-                else 
+                else
                     firstMusic.play();
             }
             else {
@@ -1293,9 +1297,8 @@ function updateGameFooter() {
                 updateInGameOptionsButtons();
                 gameOptionsBlock.style.display = "flex";
             }
-            else {
+            else 
                 gameOptionsBlock.style.display = "none";
-            }
         });
         mainMenuButton.addEventListener("click", function() {
             playClickSound();
@@ -1311,6 +1314,22 @@ function updateGameFooter() {
         footer.appendChild(rightSide);
         canvas.parentNode.insertBefore(footer, canvas.nextSibling);
     }
+    
+    const existingVersionText = document.getElementById("version-text");
+    const existingMainMenuButton = document.getElementById("game-main-menu-button");
+    const existingCreatorText = document.getElementById("creator-text");
+    const existingCopyrightText = document.getElementById("copyright-text");
+    const existingGameOptionsTitle = document.querySelector("#game-options-block > div");
+    if(existingVersionText)
+        existingVersionText.textContent = t("version");
+    if(existingMainMenuButton)
+        existingMainMenuButton.textContent = t("mainMenu");
+    if(existingCreatorText)
+        existingCreatorText.textContent = t("byJawad");
+    if(existingCopyrightText)
+        existingCopyrightText.textContent = t("copyright");
+    if(existingGameOptionsTitle)
+        existingGameOptionsTitle.textContent = t("options");
 }
 function updateCheckStatus() {
     if(isKingInCheck("white" , pieces)) {
@@ -2050,4 +2069,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-//startLoading() updateGameModeDisplay() waitTurnMessage.textContent endGame()
+//startLoading() updateGameModeDisplay() waitTurnMessage.textContent endGame() mainMenuButton updateGameFooter showLanguageMenu returnToMainMenuAfterGameOver
