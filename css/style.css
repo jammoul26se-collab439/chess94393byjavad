@@ -518,6 +518,12 @@ body {
     border-radius: 6px;
     font-size: 24px;
     font-weight: bold;
+    width: fit-content;
+    max-width: calc(100% - 20px);
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-align: center;
 }
 #creator-text {
     font-family: "Brush Script MT","Segoe Script", cursive;
@@ -573,6 +579,16 @@ body {
     transform: scale(1.05);
 }
 @media (min-width: 601px) and (max-width: 900px) {
+    #chess-game-title {
+    font-size: 22px;
+    padding: 5px 15px;
+    width: fit-content;
+    max-width: calc(100% - 20px);
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-align: center;
+}
     #start-block.language-menu {
         width: 300px;
         height: 370px;
@@ -731,6 +747,18 @@ body {
     }
 }
 @media (max-width: 600px) {
+    #chess-game-title {
+   font-size: 18px;
+   padding: 5px 11px;
+   position: relative;
+   top: 5px;
+   width: fit-content;
+   max-width: calc(100% - 20px);
+   box-sizing: border-box;
+   white-space: normal;
+   overflow-wrap: break-word;
+   text-align: center;
+}
     #start-block.language-menu {
         width: 280px;
         height: 390px;
@@ -876,12 +904,6 @@ body {
         position: relative;
         top: 20px;
     }
-    #chess-game-title {
-       font-size: 18px;
-       padding: 5px 11px;
-       position: relative;
-       top: 5px;
-    }
     #start-block {
         width: 90%;
         height: 450px;
@@ -1000,7 +1022,6 @@ body {
     padding: 5px 8px !important;
     display: inline-block !important;
 }
-
 #footer-right {
     display: flex !important;
     flex-direction: column !important;

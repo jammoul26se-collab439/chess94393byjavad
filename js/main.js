@@ -1488,16 +1488,32 @@ function updateGameFooter() {
             closeInGameOptions();
             returnToMainMenuAfterGameOver();
         });
+        /*
         rightSide.appendChild(gameOptionsBlock);
         rightSide.appendChild(gameOptionsButton);
         rightSide.appendChild(mainMenuButton);
         rightSide.appendChild(creatorText);
         rightSide.appendChild(copyrightText);
+        */
+       rightSide.appendChild(gameOptionsBlock);
+const gameButtonsContainer = document.createElement("div");
+gameButtonsContainer.id = "game-buttons-container";
+gameButtonsContainer.appendChild(gameOptionsButton);
+gameButtonsContainer.appendChild(mainMenuButton);
+rightSide.appendChild(gameButtonsContainer);
+rightSide.appendChild(creatorText);
+rightSide.appendChild(copyrightText);
+if(window.innerWidth <= 600) {
+    gameButtonsContainer.style.display = "flex";
+    gameButtonsContainer.style.flexDirection = "row";
+    gameButtonsContainer.style.justifyContent = "center";
+    gameButtonsContainer.style.alignItems = "center";
+    gameButtonsContainer.style.gap = "5px";
+}
         footer.appendChild(leftSide);
         footer.appendChild(rightSide);
         canvas.parentNode.insertBefore(footer, canvas.nextSibling);
     }
-    
     const existingVersionText = document.getElementById("version-text");
     const existingMainMenuButton = document.getElementById("game-main-menu-button");
     const existingCreatorText = document.getElementById("creator-text");
@@ -2296,4 +2312,5 @@ return;
     }
 });
 
-//startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove() ClickSoundTrack
+//startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove() ClickSoundTrack game-main-menu-button mainMenuButton
+//gameOptionsButton
