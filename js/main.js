@@ -1514,12 +1514,15 @@ if(window.innerWidth <= 600) {
         footer.appendChild(rightSide);
         canvas.parentNode.insertBefore(footer, canvas.nextSibling);
     }
+    const existingChessGameTitle = document.getElementById("chess-game-title");
     const existingVersionText = document.getElementById("version-text");
     const existingGameOptionsButton = document.getElementById("game-options-button");
     const existingMainMenuButton = document.getElementById("game-main-menu-button");
     const existingCreatorText = document.getElementById("creator-text");
     const existingCopyrightText = document.getElementById("copyright-text");
     const existingGameOptionsTitle = document.querySelector("#game-options-block > div");
+    if(existingChessGameTitle)
+        existingChessGameTitle.textContent = t("chessGame");
     if(existingVersionText)
         existingVersionText.textContent = t("version");
     if(existingGameOptionsButton)
@@ -2315,5 +2318,4 @@ return;
     }
 });
 
-//startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove() ClickSoundTrack game-main-menu-button mainMenuButton
-//gameOptionsButton footer game-options-button
+//startLoading() drawPiece() existingVersionText
