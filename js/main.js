@@ -1515,12 +1515,15 @@ if(window.innerWidth <= 600) {
         canvas.parentNode.insertBefore(footer, canvas.nextSibling);
     }
     const existingVersionText = document.getElementById("version-text");
+    const existingGameOptionsButton = document.getElementById("game-options-button");
     const existingMainMenuButton = document.getElementById("game-main-menu-button");
     const existingCreatorText = document.getElementById("creator-text");
     const existingCopyrightText = document.getElementById("copyright-text");
     const existingGameOptionsTitle = document.querySelector("#game-options-block > div");
     if(existingVersionText)
         existingVersionText.textContent = t("version");
+    if(existingGameOptionsButton)
+        existingGameOptionsButton.textContent = t("options")
     if(existingMainMenuButton)
         existingMainMenuButton.textContent = t("mainMenu");
     if(existingCreatorText)
@@ -2313,4 +2316,4 @@ return;
 });
 
 //startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove() ClickSoundTrack game-main-menu-button mainMenuButton
-//gameOptionsButton footer
+//gameOptionsButton footer game-options-button
