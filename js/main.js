@@ -283,7 +283,7 @@ let musicEnabled = true;
 let firstMusic = new Audio("assets/sounds/MusicPlayFirst.mp4");
 firstMusic.loop = true;
 firstMusic.volume = 0.8;
-const clickSound = new Audio("assets/sounds/ClickSoundTrack.m4a");
+const clickSound = new Audio("assets/sounds/ClickSoundTrack.mpeg");
 clickSound.volume = 1;
 
 function playClickSound() {
@@ -2296,4 +2296,4 @@ return;
     }
 });
 
-//startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove()
+//startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove() ClickSoundTrack
