@@ -3,6 +3,7 @@ var ctx = canvas.getContext("2d");
 canvas.width = 480;
 canvas.height = 480;
 let currentLanguage = "en";
+let pieceAnimating = false;
 const translations = {
     en: {
         loading: "Loading",
@@ -932,24 +933,31 @@ function makeEasyAIMove() {
             }
         }, 100);
     }
-    aiPiece.position = targetPosition;
+   animatePieceMove(aiPiece, targetPosition, function() {
+    if(capturedPiece) {
+        const capturedIndex = pieces.indexOf(capturedPiece);
+        if(capturedIndex !== -1)
+            pieces.splice(capturedIndex, 1);
+        if(soundsEnabled) {
+            killSound.currentTime = 0;
+            killSound.play();
+        }
+    }
     updateCheckStatus();
     if(checkedKing) {
         if(soundsEnabled) {
             checkSound.currentTime = 0;
             checkSound.play();
         }
-        if(checkForCheckmate()) {
-            drawBoard();
+        if(checkForCheckmate())
             return;
-        }
     }
     if(gameMode !== "makhloutaEasyAI" && aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
-    aiPiece.type = "queen";
-    aiPiece.image = "assets/images/black-queen.png";
+        aiPiece.type = "queen";
+        aiPiece.image = "assets/images/black-queen.png";
     }
     switchTurn();
-    drawBoard();
+});
 }
 function startHardAIGame() {
     firstMusic.pause();
@@ -1129,34 +1137,31 @@ function makeNormalAIMove() {
     const capturedPiece = pieces.find(
         piece => piece.position === targetPosition && piece.color !== aiPiece.color);
     playMoveSound();
+   animatePieceMove(aiPiece, targetPosition, function() {
     if(capturedPiece) {
         const capturedIndex = pieces.indexOf(capturedPiece);
-        pieces.splice(capturedIndex , 1);
-        setTimeout(() => {
-            if(soundsEnabled) {
-                killSound.currentTime = 0;
-                killSound.play();
-            }
-        }, 100);
+        if(capturedIndex !== -1)
+            pieces.splice(capturedIndex, 1);
+        if(soundsEnabled) {
+            killSound.currentTime = 0;
+            killSound.play();
+        }
     }
-    aiPiece.position = targetPosition;
     updateCheckStatus();
     if(checkedKing) {
         if(soundsEnabled) {
             checkSound.currentTime = 0;
             checkSound.play();
         }
-        if(checkForCheckmate()) {
-            drawBoard();
+        if(checkForCheckmate())
             return;
-        }
     }
-    if(aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
+    if(gameMode !== "makhloutaEasyAI" && aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
         aiPiece.type = "queen";
         aiPiece.image = "assets/images/black-queen.png";
     }
     switchTurn();
-    drawBoard();
+});
 }
 function drawBoard() { 
 for(let row = 0 ; row < 8 ; row++) {
@@ -2100,20 +2105,15 @@ function makeHardAIMove() {
     const targetPosition = selectedMove.move;
     const capturedPiece = pieces.find(piece => piece.position === targetPosition && piece.color !== aiPiece.color);
     playMoveSound();
+    animatePieceMove(aiPiece, targetPosition, function() {
     if(capturedPiece) {
         const capturedIndex = pieces.indexOf(capturedPiece);
-        pieces.splice(capturedIndex, 1);
-        setTimeout(() => {
-            if(soundsEnabled) {
-                killSound.currentTime = 0;
-                killSound.play();
-            }
-        }, 100);
-    }
-    aiPiece.position = targetPosition;
-    if(aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
-        aiPiece.type = "queen";
-        aiPiece.image = "assets/images/black-queen.png";
+        if(capturedIndex !== -1)
+            pieces.splice(capturedIndex, 1);
+        if(soundsEnabled) {
+            killSound.currentTime = 0;
+            killSound.play();
+        }
     }
     updateCheckStatus();
     if(checkedKing) {
@@ -2123,13 +2123,54 @@ function makeHardAIMove() {
         }
         if(checkForCheckmate()) {
             hardAIThinking = false;
-            drawBoard();
             return;
         }
     }
+    if(aiPiece.type === "pawn" && aiPiece.position[1] === "1") {
+        aiPiece.type = "queen";
+        aiPiece.image = "assets/images/black-queen.png"; 
+    }
     hardAIThinking = false;
     switchTurn();
-    drawBoard();
+});
+}
+function animatePieceMove(piece, targetPosition, callback) {
+    const startPosition = piece.position;
+    const start = getPositionCoordinates(startPosition);
+    const target = getPositionCoordinates(targetPosition);
+    const startTime = performance.now();
+    const duration = 200;
+    pieceAnimating = true;
+    function animate(currentTime) {
+        const progress = Math.min(
+            (currentTime - startTime) / duration,
+            1
+        );
+        const x = start.x + (target.x - start.x) * progress;
+        const y = start.y + (target.y - start.y) * progress;
+        piece.position = targetPosition;
+        drawBoard();
+        const image = imageCache[piece.image];
+        if(image && image.complete) {
+            ctx.drawImage(
+                image,
+                x,
+                y,
+                60,
+                60
+            );
+        }
+        if(progress < 1) 
+            requestAnimationFrame(animate);
+        else {
+            piece.position = targetPosition;
+            pieceAnimating = false;
+            drawBoard();
+            if(callback)
+                callback();
+        }
+    }
+    requestAnimationFrame(animate);
 }
 canvas.addEventListener("click", function(event) {
     if(!gameStarted)
@@ -2137,6 +2178,8 @@ canvas.addEventListener("click", function(event) {
     if(gameOver) {
         return;
     }
+    if(pieceAnimating)
+        return;
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
@@ -2161,32 +2204,32 @@ canvas.addEventListener("click", function(event) {
             const capturedIndex = pieces.indexOf(capturedPiece);
             pieces.splice(capturedIndex , 1);
         }
-        selectedPiece.position = position;
-        updateCheckStatus();
-        if(checkedKing) {
-            if(soundsEnabled) {
-                checkSound.currentTime = 0;
-                checkSound.play();
-            }
+       const movingPiece = selectedPiece;
+selectedPiece = null;
+validMoves = [];
+animatePieceMove(movingPiece, position, function() {
+    updateCheckStatus();
+    if(checkedKing) {
+        if(soundsEnabled) {
+            checkSound.currentTime = 0;
+            checkSound.play();
+        }
         if(checkForCheckmate()) {
-            selectedPiece = null;
-            validMoves = [];
             drawBoard();
             return;
         }
     }
-        console.log("White in check: " , isKingInCheck("white", pieces));
-        console.log("Black in check: " , isKingInCheck("black" , pieces));
-        if(gameMode !== "makhloutaEasyAI" && selectedPiece.type === "pawn" && ((selectedPiece.color === "white" && selectedPiece.position[1] === "8") || (selectedPiece.color === "black" && selectedPiece.position[1] === "1"))) {
-          promotionPiece = selectedPiece;
-          promotionMenu.style.display = "block";
-         }
-  else 
+    console.log("White in check: " , isKingInCheck("white", pieces));
+    console.log("Black in check: " , isKingInCheck("black" , pieces));
+    if(gameMode !== "makhloutaEasyAI" && movingPiece.type === "pawn" && ((movingPiece.color === "white" && movingPiece.position[1] === "8") || (movingPiece.color === "black" && movingPiece.position[1] === "1")) ) {
+        promotionPiece = movingPiece;
+        promotionMenu.style.display = "block";
+    }
+    else 
     switchTurn();
-       selectedPiece = null;
-       validMoves = [];
-       drawBoard();
-        return;
+    drawBoard();
+});
+return;
     }
     console.log("Position:", position);
     selectedPiece = pieces.find(piece => piece.position === position);
@@ -2253,4 +2296,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-//startLoading() drawPiece()
+//startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove()
