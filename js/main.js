@@ -291,6 +291,182 @@ function playClickSound() {
     clickSound.currentTime = 0;
     clickSound.play();
 }
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+
+        image.onload = () => {
+            resolve();
+        };
+
+        image.onerror = () => {
+            reject(new Error("Failed to load image: " + src));
+        };
+
+        image.src = src;
+    });
+}
+function loadAudio(src) {
+    return new Promise((resolve, reject) => {
+        const audio = new Audio();
+        audio.addEventListener("canplaythrough", () => {
+            resolve();
+        }, { once: true });
+        audio.addEventListener("error", () => {
+            reject(new Error("Failed to load audio: " + src));
+        }, { once: true });
+        audio.preload = "auto";
+        audio.src = src;
+        audio.load();
+    });
+}
+const gameImageAssets = [
+    "assets/images/white-pawn.png",
+    "assets/images/white-rook.png",
+    "assets/images/white-knight.png",
+    "assets/images/white-bishop.png",
+    "assets/images/white-queen.png",
+    "assets/images/white-king.png",
+    "assets/images/black-pawn.png",
+    "assets/images/black-rook.png",
+    "assets/images/black-knight.png",
+    "assets/images/black-bishop.png",
+    "assets/images/black-queen.png",
+    "assets/images/black-king.png"
+];
+const gameAudioAssets = [
+    "assets/sounds/move.m4a",
+    "assets/sounds/kill.m4a",
+    "assets/sounds/Check.mp4",
+    "assets/sounds/youWinSoundTrick.mp4"
+];
+let assetsReady = false;
+function preloadGameAssets() {
+    const imagePromises = gameImageAssets.map(src => loadImage(src));
+    const audioPromises = gameAudioAssets.map(src => loadAudio(src));
+    const characterVoicePromises = characterVoices.map(audio => {
+        return new Promise((resolve, reject) => {
+            if(audio.readyState >= 4) {
+                resolve();
+                return;
+            }
+            audio.addEventListener("canplaythrough", () => {
+                resolve();
+            }, { once: true });
+            audio.addEventListener("error", () => {
+                reject(new Error("Failed to load character voice"));
+            }, { once: true });
+            audio.preload = "auto";
+            audio.load();
+        });
+    });
+    const musicPromises = [
+    waitForAudioReady(firstMusic),
+    waitForAudioReady(gameMusic)
+];
+    return Promise.all([
+        ...imagePromises,
+        ...audioPromises,
+        ...characterVoicePromises
+    ]).then(() => {
+        assetsReady = true;
+    });
+}
+function waitForAudioReady(audio) {
+    return new Promise((resolve, reject) => {
+        if(audio.readyState >= 4) {
+            resolve();
+            return;
+        }
+        audio.addEventListener("canplaythrough", () => {
+            resolve();
+        }, { once: true });
+        audio.addEventListener("error", () => {
+            reject(new Error("Failed to load music"));
+        }, { once: true });
+        audio.preload = "auto";
+        audio.load();
+    });
+}
+function waitForAudioReady(audio) {
+    return new Promise((resolve) => {
+        if(audio.readyState >= 3) {
+            resolve();
+            return;
+        }
+        const onReady = () => {
+            audio.removeEventListener("canplaythrough", onReady);
+            audio.removeEventListener("loadeddata", onReady);
+            resolve();
+        };
+        audio.addEventListener("canplaythrough", onReady);
+        audio.addEventListener("loadeddata", onReady);
+        audio.load();
+    });
+}
+function preloadAssets() {
+    const imagePaths = [
+        "assets/images/white-pawn.png",
+        "assets/images/white-rook.png",
+        "assets/images/white-knight.png",
+        "assets/images/white-bishop.png",
+        "assets/images/white-queen.png",
+        "assets/images/white-king.png",
+        "assets/images/black-pawn.png",
+        "assets/images/black-rook.png",
+        "assets/images/black-knight.png",
+        "assets/images/black-bishop.png",
+        "assets/images/black-queen.png",
+        "assets/images/black-king.png"
+    ];
+    const imagePromises = imagePaths.map((src) => {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+            img.src = src;
+        });
+    });
+    const audioPromises = [
+        waitForAudioReady(moveSound),
+        waitForAudioReady(killSound),
+        waitForAudioReady(checkSound),
+        waitForAudioReady(youWinSound),
+        waitForAudioReady(youLoseSound)
+    ];
+    const characterVoicePromises = characterVoices.map((voice) => {
+        return waitForAudioReady(voice);
+    });
+    const musicPromises = [
+        waitForAudioReady(firstMusic),
+        waitForAudioReady(gameMusic)
+    ];
+    return Promise.all([
+        ...imagePromises,
+        ...audioPromises,
+        ...characterVoicePromises,
+        ...musicPromises
+    ]).then(() => {
+        preloadAssetsReady = true;
+    });
+}
+let preloadAssetsReady = false;
+function waitForAudioReady(audio) {
+    return new Promise((resolve) => {
+        if(audio.readyState >= 3) {
+            resolve();
+            return;
+        }
+        const onReady = () => {
+            audio.removeEventListener("canplaythrough", onReady);
+            audio.removeEventListener("loadeddata", onReady);
+            resolve();
+        };
+        audio.addEventListener("canplaythrough", onReady);
+        audio.addEventListener("loadeddata", onReady);
+        audio.load();
+    });
+}
 function startLoading(callback) {
     startBlock.style.display = "none";
     loadingText.style.display = "block";
@@ -305,9 +481,11 @@ function startLoading(callback) {
         }
         if(loadingCycles === 2) {
             clearInterval(loadingInterval);
-            loadingText.style.display = "none";
-            if(callback)
-              callback();
+            preloadAssets().then(() => {
+                loadingText.style.display = "none";
+                if(callback)
+                    callback();
+            });
         }
     }, 500);
 }
@@ -2075,4 +2253,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-//setupGameInterface endGame() mainMenuButton updateGameFooter showLanguageMenu returnToMainMenuAfterGameOver
+//startLoading()
