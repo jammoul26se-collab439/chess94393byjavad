@@ -2253,4 +2253,4 @@ canvas.addEventListener("click", function(event) {
     }
 });
 
-//startLoading()
+//startLoading() drawPiece()
