@@ -751,7 +751,7 @@ body {
    font-size: 18px;
    padding: 5px 11px;
    position: relative;
-   top: 15px;
+   top: 50px;
    width: fit-content;
    max-width: calc(100% - 20px);
    box-sizing: border-box;
