@@ -2313,4 +2313,4 @@ return;
 });
 
 //startLoading() drawPiece() includes makeEasyAIMove() makeNormalAIMove() makeHardAIMove() ClickSoundTrack game-main-menu-button mainMenuButton
-//gameOptionsButton
+//gameOptionsButton footer
