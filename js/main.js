@@ -660,7 +660,7 @@ function showOptionsMenu() {
         musicEnabled = !musicEnabled;
         gameMusic.muted = !musicEnabled;
         firstMusic.muted = !musicEnabled;
-        youWinSound.muted = !musicEnabled;
+      //  youWinSound.muted = !musicEnabled;
         if(musicEnabled) {
             if(gameStarted)
                 gameMusic.play();
@@ -859,7 +859,7 @@ function startTwoPlayersGame() {
             aiMoveTimeout = null;
         }
         setupGameInterface();
-        if(soundsEnabled && musicEnabled) {
+        if(musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
         }
@@ -883,7 +883,7 @@ function startEasyAIGame() {
             aiMoveTimeout = null;
         }
         setupGameInterface();
-        if(soundsEnabled && musicEnabled) {
+        if(musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
         }
@@ -985,7 +985,7 @@ function startHardAIGame() {
             aiMoveTimeout = null;
         }
         setupGameInterface();
-        if(soundsEnabled && musicEnabled) {
+        if(musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
         }
@@ -1009,7 +1009,7 @@ function startNormalAIGame() {
             aiMoveTimeout = null;
         }
         setupGameInterface();
-        if(soundsEnabled && musicEnabled) {
+        if(musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
         }
@@ -1035,7 +1035,7 @@ function startMakhloutaEasyAIGame() {
         createMakhloutaPosition();
         updateCheckStatus();
         setupGameInterface();
-        if(soundsEnabled && musicEnabled) {
+        if(musicEnabled) {
             gameMusic.currentTime = 0;
             gameMusic.play();
         }
