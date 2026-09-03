@@ -952,7 +952,7 @@ body {
         padding: 7px 10px;
     }
     #start-block.sound-menu {
-        width: 250px !important;
+        width: 220px !important;
         height: 130px !important;
         min-height: 0 !important;
         max-height: 130px !important;
@@ -980,7 +980,7 @@ body {
         margin: 0;
     }
     #start-block.main-menu {
-        width: 300px;
+        width: 270px;
         height: 340px;
         transform: translateY(-50px);
     }
