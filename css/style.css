@@ -980,7 +980,8 @@ body {
         margin: 0;
     }
     #start-block.main-menu {
-        width: 100px !important;
+        width: 280px !important;
+        min-width: 0;
         height: 340px;
         transform: translateY(-50px);
     }
