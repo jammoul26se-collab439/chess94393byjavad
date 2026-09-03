@@ -981,7 +981,7 @@ body {
         margin: 0;
     }
     #start-block.main-menu {
-        width: 330px !important;
+        width: max-content !important;
         min-width: 0;
         height: 340px;
         transform: translateY(-50px);
