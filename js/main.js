@@ -50,7 +50,8 @@ const translations = {
         player02Win: "Player 02 Win",
         player01Win: "Player 01 Win",
         player: "Player",
-        waitYourTurn: "Please wait your turn"
+        waitYourTurn: "Please wait your turn",
+        check: "Check!"
     },
     fr: {
         loading: "Chargement",
@@ -97,7 +98,8 @@ const translations = {
         player02Win: "Victoire du joueur 02",
         player01Win: "Victoire du joueur 01",
         player: "Joueur",
-        waitYourTurn: "Veuillez attendre votre tour"
+        waitYourTurn: "Veuillez attendre votre tour",
+        check: "Échec !"
     },
     es: {
         loading: "Cargando",
@@ -144,7 +146,8 @@ const translations = {
         player02Win: "Victoria del jugador 02",
         player01Win: "Victoria del jugador 01",
         player: "Jugador",
-        waitYourTurn: "Por favor espera tu turno"
+        waitYourTurn: "Por favor espera tu turno",
+        check: "¡Jaque!"
     },
     ru: {
         loading: "Загрузка",
@@ -191,7 +194,8 @@ const translations = {
         player02Win: "Победа игрока 02",
         player01Win: "Победа игрока 01",
         player: "Игрок",
-        waitYourTurn: "Пожалуйста, дождитесь своего хода"
+        waitYourTurn: "Пожалуйста, дождитесь своего хода",
+        check: "Шах!"
     },
     ar: {
         loading: "جار التحميل",
@@ -238,7 +242,8 @@ const translations = {
         player02Win: "فوز اللاعب 02",
         player01Win: "فوز اللاعب 01",
         player: "اللاعب",
-        waitYourTurn: "الرجاء انتظار دورك"
+        waitYourTurn: "الرجاء انتظار دورك",
+        check: "كش!"
     }
 };
 function t(key) {
@@ -1408,6 +1413,9 @@ function updateGameFooter() {
         gameOptionsBlock.style.flexDirection = "column";
         gameOptionsBlock.style.alignItems = "center";
         gameOptionsBlock.style.gap = "8px";
+        const existingCheckMessage = document.getElementById("check-message");
+        if(existingCheckMessage)
+            existingCheckMessage.textContent = t("check");
         const gameOptionsTitle = document.createElement("div");
         gameOptionsTitle.textContent = t("options");
         gameOptionsTitle.style.color = "white";
@@ -2318,4 +2326,4 @@ return;
     }
 });
 
-//startLoading() drawPiece() existingVersionText
+//startLoading() drawPiece() existingVersionText updateGameFooter
