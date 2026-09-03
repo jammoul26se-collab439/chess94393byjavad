@@ -1524,7 +1524,7 @@ if(window.innerWidth <= 600) {
         footer.appendChild(leftSide);
         footer.appendChild(rightSide);
         canvas.parentNode.insertBefore(footer, canvas.nextSibling);
-        footer.style.display = "none";
+        //footer.style.display = "none";
     }
     const existingChessGameTitle = document.getElementById("chess-game-title");
     const existingVersionText = document.getElementById("version-text");
