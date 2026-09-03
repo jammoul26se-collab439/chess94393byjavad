@@ -803,10 +803,13 @@ body {
     transform: translateY(-25px);
 }
 #start-block.qr-menu .menu-title {
-    width: 270px;
-    font-size: 18px;
+    width: auto;
+    max-width: 100%;
+    font-size: 14px;
     padding: 8px 8px;
     margin-bottom: 5px;
+    white-space: nowrap;
+    box-sizing: border-box;
 }
 #start-block.qr-menu .qr-image {
     width: 190px;
@@ -949,7 +952,7 @@ body {
         padding: 7px 10px;
     }
     #start-block.sound-menu {
-        width: 280px !important;
+        width: 250px !important;
         height: 130px !important;
         min-height: 0 !important;
         max-height: 130px !important;
@@ -977,7 +980,7 @@ body {
         margin: 0;
     }
     #start-block.main-menu {
-        width: 330px;
+        width: 300px;
         height: 340px;
         transform: translateY(-50px);
     }
@@ -997,10 +1000,13 @@ body {
         transform: translateY(-25px);
     }
     #start-block.difficulty-menu .menu-title {
-        width: 280px;
-        font-size: 20px;
+        width: auto;
+        max-width: 100%;
+        font-size: 16px;
         padding: 10px 12px;
         margin-bottom: 12px;
+        white-space: nowrap;
+        box-sizing: border-box;
     }
     #start-block.difficulty-menu .menu-button {
         width: 200px;
@@ -1033,9 +1039,11 @@ body {
     left: auto !important;
     transform: none !important;
     margin: 0 !important;
-    width: 100px !important;
+    width: auto !important;
+    min-width: 100px !important;
     padding: 5px 8px !important;
     display: inline-block !important;
+    white-space: nowrap;
 }
 #footer-right {
     display: flex !important;
