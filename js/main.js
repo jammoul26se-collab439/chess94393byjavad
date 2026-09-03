@@ -2326,4 +2326,4 @@ return;
     }
 });
 
-//startLoading() drawPiece() existingVersionText updateGameFooter
+//startLoading() drawPiece() existingVersionText updateGameFooter style
