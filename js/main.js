@@ -1547,10 +1547,12 @@ if(window.innerWidth <= 600) {
 function updateCheckStatus() {
     if(isKingInCheck("white" , pieces)) {
         checkedKing = "white";
+        checkMessage.textContent = t("check");
         checkMessage.style.display = "block";
     }
     else if(isKingInCheck("black" , pieces)) {
         checkedKing = "black";
+        checkMessage.textContent = t("check");
         checkMessage.style.display = "block";
     }
     else {
