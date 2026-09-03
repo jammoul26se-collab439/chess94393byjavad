@@ -1,3 +1,7 @@
+if(window.innerWidth <=768 && !localStorage.getItem("mobileAlertShown")) {
+    alert("Best played on a laptop for better layout and controls");
+    localStorage.setItem("mobileAlertShown" , "true");
+}
 var canvas = document.getElementById("chess-board");
 var ctx = canvas.getContext("2d");
 canvas.width = 480;
